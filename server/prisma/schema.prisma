@@ -11,18 +11,20 @@ datasource db {
 }
 
 model User {
-  id      String @id @default(cuid())
-  name    String
-  surname String
-  role    Role   @relation(fields: [roleId], references: [id])
-  roleId  String @unique
+  id       String @id @default(cuid())
+  name     String
+  surname  String
+  role     Role   @relation(fields: [roleId], references: [id])
+  roleId   String 
+  email   String  @unique
+  password String
 }
 
 enum RoleName {
   STUDENT
   JR_TEACHER
   SR_TEACHER
-  ACCOUNTER
+  ACCOUNTANT
   ADMIN
   SUPER_ADMIN
 }
@@ -30,7 +32,7 @@ enum RoleName {
 model Role {
   id         String       @id @default(cuid())
   name       RoleName
-  user       User?
+  user       User[]
   permission Permission[]
 }
 
