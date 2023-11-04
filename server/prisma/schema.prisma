@@ -10,35 +10,284 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String @id @default(cuid())
-  name     String
-  surname  String
-  role     Role   @relation(fields: [roleId], references: [id])
-  roleId   String 
-  email   String  @unique
-  password String
-}
-
-enum RoleName {
+enum UserType {
   STUDENT
-  JR_TEACHER
-  SR_TEACHER
+  TEACHER
   ACCOUNTANT
   ADMIN
-  SUPER_ADMIN
 }
 
-model Role {
-  id         String       @id @default(cuid())
-  name       RoleName
-  user       User[]
-  permission Permission[]
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  surname     String
+  email       String       @unique
+  password    String
+  type        UserType
+  students    Student[]
+  teachers    Teacher[]
+  admins      Admin[]
+  accountants Accountant[]
+}
+
+enum PermissionType {
+  EDIT_STUDENT
+  VIEW_STUDENT
+  CREATE_STUDENT
+  DELETE_STUDENT
 }
 
 model Permission {
-  id     String @id @default(cuid())
-  name   String
-  role   Role   @relation(fields: [roleId], references: [id])
-  roleId String
+  id          String         @id @default(cuid())
+  type        PermissionType
+  students    Student[]
+  teachers    Teacher[]
+  admins      Admin[]
+  accountants Accountant[]
+}
+
+model Student {
+  code        String         @unique
+  id          String         @id @default(cuid())
+  user        User           @relation(fields: [id], references: [id])
+  isActive    Boolean        @default(true)
+  EOC         DateTime
+  cohortId    String
+  cohort      Cohort         @relation(fields: [cohortId], references: [id])
+  sectionId   String
+  section     Section        @relation(fields: [sectionId], references: [id])
+  permissions Permission[]
+  courses     Course[]
+  transaction Transactions[]
+  userAnswer      UserAnswer[]
+  examResult ExamResult[]
+  courseResut CourseResult[]
+  assignmentResults AssignmentResult[]
+  fee Fee[]
+}
+
+model Teacher {
+  code        String       @unique
+  id          String       @id @default(cuid())
+  user        User         @relation(fields: [id], references: [id])
+  isActive    Boolean      @default(true)
+  Courses     Course[]
+  permissions Permission[]
+  sections    Section[]
+  exams       Exam[]
+  assignments Assignment[]
+}
+
+model Accountant {
+  code         String         @unique
+  id           String         @id @default(cuid())
+  user         User           @relation(fields: [id], references: [id])
+  isActive     Boolean        @default(true)
+  permissions  Permission[]
+  transactions Transactions[]
+}
+
+model Admin {
+  code        String       @unique
+  id          String       @id @default(cuid())
+  user        User         @relation(fields: [id], references: [id])
+  isActive    Boolean      @default(true)
+  permissions Permission[]
+}
+
+model Course {
+  code       String       @unique
+  id         String       @id @default(cuid())
+  contentUrl String
+  name       String
+  semesterId String
+  semester   Semester     @relation(fields: [semesterId], references: [id])
+  teacherId  String
+  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  sections   Section[]
+  assignment Assignment[]
+  exams      Exam[]
+  cohort     Cohort[]
+  courseResut CourseResult[]
+  students   Student[]
+  schedules  Schedule[]
+}
+
+model Cohort {
+  code     String
+  id       String    @id @default(cuid())
+  name     String
+  careerId String
+  career   Career    @relation(fields: [careerId], references: [id])
+  sections Section[]
+  students Student[]
+  course   Course[]
+}
+
+model Career {
+  id        String     @id @default(cuid())
+  code      String
+  name      String
+  cost      Int
+  semesters Semester[]
+  cohorts   Cohort[]
+  fee Fee[]
+}
+
+model Semester {
+  id       String   @id @default(cuid())
+  code     String
+  name     String
+  careerId String
+  career   Career   @relation(fields: [careerId], references: [id])
+  courses  Course[]
+}
+
+model Section {
+  id        String     @id @default(cuid())
+  name      String
+  cohortId  String
+  cohort    Cohort     @relation(fields: [cohortId], references: [id])
+  teacherId String
+  teacher   Teacher    @relation(fields: [teacherId], references: [id])
+  schedules Schedule[]
+  courses   Course[]
+  students  Student[]
+}
+
+enum PaymentPurpose {
+  FEES
+  EXTRA_CURRICULAR
+  DAMAGES
+}
+
+model Transactions {
+  id           String         @id @default(cuid())
+  amount       String
+  purpose      PaymentPurpose
+  status       String
+  notes        String?
+  createdAt    DateTime       @default(now())
+  student_code String
+  student      Student        @relation(fields: [student_code], references: [code])
+  accountantId String
+  accountant   Accountant     @relation(fields: [accountantId], references: [id])
+  fee Fee[]
+
+}
+
+model Assignment {
+  code      String
+  id        String     @id @default(cuid())
+  name      String
+  autoMark  Boolean
+  teacherId String
+  teacher   Teacher    @relation(fields: [teacherId], references: [id])
+  courseId  String
+  course    Course     @relation(fields: [courseId], references: [id])
+  questions Question[]
+  assignmentResults AssignmentResult[]
+
+}
+
+model Exam {
+  code       String
+  id         String     @id @default(cuid())
+  totalMarks Int
+  autoMark   Boolean
+  teacherId  String
+  teacher    Teacher    @relation(fields: [teacherId], references: [id])
+  courseId   String
+  course     Course     @relation(fields: [courseId], references: [id])
+  examResult ExamResult[]
+  questions  Question[]
+}
+
+model Schedule {
+  id        String    @id @default(cuid())
+  startTime DateTime
+  endTime   DateTime
+  courseId  String
+  course    Course    @relation(fields: [courseId], references: [id])
+  section   Section[]
+}
+
+enum QuestionType {
+  MULTICHOICE
+  TEXTAREA
+}
+
+model Question {
+  id             String           @id @default(cuid())
+  required       Boolean
+  type           QuestionType
+  content        String
+  examId         String?
+  exam           Exam?            @relation(fields: [examId], references: [id])
+  assignmentId   String?
+  assignment     Assignment?      @relation(fields: [assignmentId], references: [id])
+  questionOption QuestionOption[]
+  userAnswer UserAnswer[]
+}
+
+model QuestionOption {
+  id             String         @id @default(cuid())
+  answer         String
+  isCorrect      Boolean
+  questionId     String
+  question       Question         @relation(fields: [questionId], references: [id])
+}
+
+model UserAnswer {
+  id        String  @id @default(cuid())
+  answer    String
+  questionId String
+  question Question @relation(fields: [questionId],references: [id])
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+  examResults ExamResult[]
+  assignmentResults AssignmentResult[]
+}
+
+model ExamResult {
+  id  String  @id @default(cuid())
+  score String
+  examId String
+  exam   Exam @relation(fields: [examId], references: [id]) 
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id]) 
+  userAnswer UserAnswer[]
+  courseResultId String
+  courseResult CourseResult @relation(fields: [courseResultId],references: [id])
+
+}
+model AssignmentResult {
+  id  String  @id @default(cuid())
+  score String
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id]) 
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id]) 
+  userAnswer UserAnswer[]
+}
+model CourseResult {
+  id  String  @id @default(cuid())
+  score String
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id]) 
+  courseId String
+  course Course @relation(fields: [courseId],references: [id])
+  examResults ExamResult[]
+}
+
+model Fee {
+  id String @id @default(cuid())
+  amount Int
+  balance Int
+  paid Int
+  careerId String
+  Career   Career   @relation(fields: [careerId], references: [id])
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id]) 
+  transaction Transactions[]
 }
