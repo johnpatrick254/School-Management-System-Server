@@ -28,6 +28,8 @@ model User {
   teachers    Teacher[]
   admins      Admin[]
   accountants Accountant[]
+  permissions Permission[]
+
 }
 
 enum PermissionType {
@@ -40,10 +42,7 @@ enum PermissionType {
 model Permission {
   id          String         @id @default(cuid())
   type        PermissionType
-  students    Student[]
-  teachers    Teacher[]
-  admins      Admin[]
-  accountants Accountant[]
+  users User[]
 }
 
 model Student {
@@ -56,7 +55,6 @@ model Student {
   cohort      Cohort         @relation(fields: [cohortId], references: [id])
   sectionId   String
   section     Section        @relation(fields: [sectionId], references: [id])
-  permissions Permission[]
   courses     Course[]
   transaction Transactions[]
   userAnswer      UserAnswer[]
@@ -72,7 +70,6 @@ model Teacher {
   user        User         @relation(fields: [id], references: [id])
   isActive    Boolean      @default(true)
   Courses     Course[]
-  permissions Permission[]
   sections    Section[]
   exams       Exam[]
   assignments Assignment[]
@@ -83,7 +80,6 @@ model Accountant {
   id           String         @id @default(cuid())
   user         User           @relation(fields: [id], references: [id])
   isActive     Boolean        @default(true)
-  permissions  Permission[]
   transactions Transactions[]
 }
 
@@ -92,7 +88,6 @@ model Admin {
   id          String       @id @default(cuid())
   user        User         @relation(fields: [id], references: [id])
   isActive    Boolean      @default(true)
-  permissions Permission[]
 }
 
 model Course {
