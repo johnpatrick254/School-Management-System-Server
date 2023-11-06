@@ -6,15 +6,15 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/database/database.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { updateUserDTO } from './DTO/update-user.dto';
 
-@Injectable()
-export class UsersService {
-  constructor(private prisma: PrismaService) {}
 
+@Injectable()
+export class UserService {
+  constructor(private prisma: PrismaService) { }
   async getUserById(id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -32,7 +32,7 @@ export class UsersService {
       users.push({
         name: user.name,
         surname: user.surname,
-        roleId: user.roleId,
+        type: user.type,
         id: user.id,
         email: user.email,
       }),

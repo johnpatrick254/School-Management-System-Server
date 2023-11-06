@@ -6,17 +6,16 @@ import {
   Get,
   Param,
   Delete,
-  HttpException,
   BadRequestException,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './users.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { User } from '@prisma/client';
 import { updateUserDTO } from './DTO/update-user.dto';
 
 @Controller('user')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UserService) {}
 
   @Post()
   async createUser(@Body() user: CreateUserDTO): Promise<User> {
