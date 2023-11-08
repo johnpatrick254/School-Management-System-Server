@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import  UserType  from "src/lib/types/UserType.type";
+import UserType from "src/lib/types/UserType.type";
 
 export class CreateUserDTO {
 
@@ -12,15 +12,6 @@ export class CreateUserDTO {
     @IsNotEmpty()
     @IsEmail()
     email: string
-     
     @IsEnum(UserType)
-    type:UserType
-
-    @IsNotEmpty()
-    @IsString()
-    password: string
-
-    @IsString()
-    @IsNotEmpty()
-    password_confirm: string
+    type: UserType
 }
