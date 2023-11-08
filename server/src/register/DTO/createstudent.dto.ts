@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateStudentDTO {
 
@@ -12,6 +12,6 @@ export class CreateStudentDTO {
     @IsString()
     cohortId: string
     @IsNotEmpty()
-    @IsEmail()
+    @IsString()
     sectionId: string
 }
