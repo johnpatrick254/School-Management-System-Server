@@ -46,8 +46,9 @@ model Permission {
 
 model Student {
   code              String             @unique
-  id                String             @id
-  user              User               @relation(fields: [id], references: [id])
+  id                String             @id @default(cuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id])
   isActive          Boolean            @default(true)
   EOC               DateTime
   cohortId          String
@@ -66,7 +67,7 @@ model Student {
 model Teacher {
   code        String       @unique
   id          String       @id @default(cuid())
-  userId String
+  userId      String
   user        User         @relation(fields: [userId], references: [id])
   isActive    Boolean      @default(true)
   Courses     Course[]
@@ -77,16 +78,18 @@ model Teacher {
 
 model Accountant {
   code         String         @unique
-  id           String         @id
-  user         User           @relation(fields: [id], references: [id])
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
   isActive     Boolean        @default(true)
   transactions Transactions[]
 }
 
 model Admin {
   code     String  @unique
-  id       String  @id
-  user     User    @relation(fields: [id], references: [id])
+  id       String  @id @default(cuid())
+  userId   String
+  user     User    @relation(fields: [userId], references: [id])
   isActive Boolean @default(true)
 }
 
