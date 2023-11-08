@@ -10,6 +10,7 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'src/database/database.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { updateUserDTO } from './DTO/update-user.dto';
+import {hash} from "bcrypt"
 
 
 @Injectable()
@@ -42,15 +43,16 @@ export class UserService {
   }
 
   async createUser(user: CreateUserDTO): Promise<User> {
-    if (user.password !== user.password_confirm) {
-      throw new HttpException(
-        'Passwords do not match',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
+    const newPwd = crypto.randomUUID()
     try {
-      const { password_confirm, ...userData } = user;
-      const newUser = await this.prisma.user.create({ data: userData });
+   
+      const newUser = await this.prisma.user.create({ data: {
+        ...user,
+        password:await hash(newPwd,100),
+        permissions:{
+          connect: [{id:"cloopkd910000l1g8joi0ouww"}]
+        }
+      } });
       return newUser;
     } catch (error) {
       console.log(error.message);
