@@ -1,12 +1,23 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { loginDTO } from './DTO/login.dto';
 import { compare } from 'bcrypt';
 import { PrismaService } from 'src/database/database.service';
 import { Accountant, Admin, Student, Teacher } from '@prisma/client';
+import { verify } from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
+import { config } from 'process';
+import { logger } from 'src/lib/logger';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private config: ConfigService,
+  ) {}
 
   async loginStudent(data: loginDTO): Promise<Student> {
     const currentUser = await this.prisma.student.findUnique({
@@ -73,5 +84,16 @@ export class AuthService {
     }
 
     throw new UnauthorizedException('Code or password is incorrect');
+  }
+
+  validateUser(accessToken: string): boolean {
+    const secret = this.config.get('SECRET');
+    try {
+      if (!verify(accessToken, secret)) throw new UnauthorizedException();
+      return true;
+    } catch (error) {
+      logger.debug(error);
+      throw new InternalServerErrorException();
+    }
   }
 }
