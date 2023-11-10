@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { RegisterService } from './register.service';
-import { CreateUserDTO } from 'src/users/DTO/create-user.dto';
 import { CreateStudentDTO } from './DTO/createstudent.dto';
 import {
   CreateAccountantDTO,
@@ -8,40 +7,27 @@ import {
   CreateTeacherDTO,
 } from './DTO/createstaff.dto';
 
-const logger = new Logger();
 @Controller('register')
 export class RegisterController {
   constructor(private registerService: RegisterService) {}
 
   @Post('student')
-  async registerStudent(
-    @Body('userData') userData: CreateUserDTO,
-    @Body('schoolData') schoolData: CreateStudentDTO,
-  ) {
-    return await this.registerService.createStudent(userData, schoolData);
+  async registerStudent(@Body() data: CreateStudentDTO) {
+    return await this.registerService.createStudent(data);
   }
 
   @Post('teacher')
-  async registerTeacher(
-    @Body('userData') userData: CreateUserDTO,
-    @Body('schoolData') schoolData: CreateTeacherDTO,
-  ) {
-    return await this.registerService.createTeacher(userData, schoolData);
+  async registerTeacher(@Body() data: CreateTeacherDTO) {
+    return await this.registerService.createTeacher(data);
   }
 
   @Post('admin')
-  async registerAdmin(
-    @Body('userData') userData: CreateUserDTO,
-    @Body('schoolData') schoolData: CreateAdminDTO,
-  ) {
-    return await this.registerService.createAdmin(userData, schoolData);
+  async registerAdmin(@Body() data: CreateAdminDTO) {
+    return await this.registerService.createAdmin(data);
   }
 
   @Post('accountant')
-  async registerAccountant(
-    @Body('userData') userData: CreateUserDTO,
-    @Body('schoolData') schoolData: CreateAccountantDTO,
-  ) {
-    return await this.registerService.createAccountant(userData, schoolData);
+  async registerAccountant(@Body() data: CreateAccountantDTO) {
+    return await this.registerService.createAccountant(data);
   }
 }
