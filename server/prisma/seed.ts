@@ -1,9 +1,7 @@
 import { Permission, PermissionType, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-//////////////
-//Permission//
-//////////////
+// Permissions
 const seed = async () => {
   const permissions = [
     'EDIT_STUDENT',
@@ -19,48 +17,35 @@ const seed = async () => {
     savedPermissions.push(createdPermission);
   });
 
-  ///////////////
-  //Super Admin//
-  ///////////////
-  await prisma.user.create({
+  // Super Admin
+  await prisma.admin.create({
     data: {
+      code: 'admin-001',
       name: 'super',
       surname: 'admin',
       email: 'super-admin@gmail.com',
       password: '1234',
-      type: 'ADMIN',
       permissions: {
         connect: savedPermissions,
       },
     },
   });
 
-  ///////////
-  //TEACHER//
-  ///////////
-  const newUserTeacher = await prisma.user.create({
-    data: {
-      name: 'teacher',
-      surname: '1',
-      email: 'teacher-12@gmail.com',
-      password: '1234',
-      type: 'TEACHER',
-      permissions: {
-        connect: savedPermissions,
-      },
-    },
-  });
-
+  // Teacher
   const teacher = await prisma.teacher.create({
     data: {
-      code: 'WEB-TS/01',
-      userId: newUserTeacher.id,
+      code: 'teacher-001',
+      name: 'teacher',
+      surname: '001',
+      email: 'teacher-001@gmail.com',
+      password: '1234',
+      permissions: {
+        connect: savedPermissions,
+      },
     },
   });
 
-  ///////////
-  //Career//
-  /////////
+  // Career
   const career = await prisma.career.create({
     data: {
       code: 'JS-101',
@@ -69,9 +54,7 @@ const seed = async () => {
     },
   });
 
-  ///////////
-  //Cohort//
-  /////////
+  // Cohort
   const cohort = await prisma.cohort.create({
     data: {
       code: 'JS-2023',
@@ -80,9 +63,7 @@ const seed = async () => {
     },
   });
 
-  ////////////
-  //SECTION//
-  //////////
+  // Section
   const section = await prisma.section.create({
     data: {
       name: 'JS Fundamentals',
@@ -91,29 +72,21 @@ const seed = async () => {
     },
   });
 
-  ////////////
-  //STUDENT//
-  //////////
-  const newUserStudent = await prisma.user.create({
-    data: {
-      name: 'student',
-      surname: '1',
-      email: 'student-12@gmail.com',
-      password: '1234',
-      type: 'STUDENT',
-      permissions: {
-        connect: savedPermissions,
-      },
-    },
-  });
+  // Student
   const eoc = new Date('1/12/2024').toISOString();
-  const student = await prisma.student.create({
+  await prisma.student.create({
     data: {
-      code: 'WEBDEV/STU/001',
+      code: 'student-001',
+      name: 'student',
+      surname: '001',
+      email: 'student-001@gmail.com',
+      password: '1234',
       cohortId: cohort.id,
       EOC: eoc,
       sectionId: section.id,
-      userId: newUserStudent.id,
+      permissions: {
+        connect: savedPermissions,
+      },
     },
   });
 };
