@@ -17,20 +17,6 @@ enum UserType {
   ADMIN
 }
 
-model User {
-  id          String       @id @default(cuid())
-  name        String
-  surname     String
-  email       String       @unique
-  password    String
-  type        UserType
-  students    Student[]
-  teachers    Teacher[]
-  admins      Admin[]
-  accountants Accountant[]
-  permissions Permission[]
-}
-
 enum PermissionType {
   EDIT_STUDENT
   VIEW_STUDENT
@@ -39,16 +25,21 @@ enum PermissionType {
 }
 
 model Permission {
-  id    String         @id @default(cuid())
-  type  PermissionType
-  users User[]
+  id          String         @id @default(cuid())
+  type        PermissionType
+  students    Student[]
+  teachers    Teacher[]
+  accountants Accountant[]
+  admins      Admin[]
 }
 
 model Student {
-  code              String             @unique
   id                String             @id @default(cuid())
-  userId            String
-  user              User               @relation(fields: [userId], references: [id])
+  code              String             @unique
+  name              String
+  surname           String
+  email             String             @unique
+  password          String
   isActive          Boolean            @default(true)
   EOC               DateTime
   cohortId          String
@@ -62,35 +53,45 @@ model Student {
   courseResult      CourseResult[]
   assignmentResults AssignmentResult[]
   fee               Fee[]
+  permissions       Permission[]
 }
 
 model Teacher {
-  code        String       @unique
   id          String       @id @default(cuid())
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
+  code        String       @unique
+  name        String
+  surname     String
+  email       String       @unique
+  password    String
   isActive    Boolean      @default(true)
   Courses     Course[]
   sections    Section[]
   exams       Exam[]
   assignments Assignment[]
+  permissions Permission[]
 }
 
 model Accountant {
-  code         String         @unique
   id           String         @id @default(cuid())
-  userId       String
-  user         User           @relation(fields: [userId], references: [id])
+  code         String         @unique
+  name         String
+  surname      String
+  email        String         @unique
+  password     String
   isActive     Boolean        @default(true)
   transactions Transactions[]
+  permissions  Permission[]
 }
 
 model Admin {
-  code     String  @unique
-  id       String  @id @default(cuid())
-  userId   String
-  user     User    @relation(fields: [userId], references: [id])
-  isActive Boolean @default(true)
+  id          String       @id @default(cuid())
+  code        String       @unique
+  name        String
+  surname     String
+  email       String       @unique
+  password    String
+  isActive    Boolean      @default(true)
+  permissions Permission[]
 }
 
 model Course {
