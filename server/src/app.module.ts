@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
-import { UsersModule } from './users/users.module';
-import {ConfigModule}  from "@nestjs/config"
+import { ConfigModule } from '@nestjs/config';
 import { RegisterModule } from './register/register.module';
+import { AuthModule } from './auth/auth.module';
+
 @Module({
-  imports: [ConfigModule.forRoot({envFilePath:`.env`}),DatabaseModule, UsersModule,RegisterModule],
+  imports: [
+    ConfigModule.forRoot({ envFilePath: `.env`, isGlobal: true }),
+    DatabaseModule,
+    RegisterModule,
+    AuthModule,
+  ],
   providers: [],
 })
 export class AppModule {}
