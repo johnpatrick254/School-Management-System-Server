@@ -39,6 +39,11 @@ export class RegisterService {
               id: data.sectionId,
             },
           },
+          permissions:{
+            connect:{
+              id:'closzn17b0001l19sl6yl5afq'
+            }
+          }
         },
       });
 
@@ -60,10 +65,7 @@ export class RegisterService {
 
       const newTeacher = await this.prisma.teacher.create({
         data: {
-          code: data.code,
-          name: data.name,
-          surname: data.surname,
-          email: data.email,
+          ...data,
           password: await hash(newPwd, 10),
         },
       });
@@ -86,10 +88,7 @@ export class RegisterService {
 
       const admin = await this.prisma.admin.create({
         data: {
-          code: data.code,
-          name: data.name,
-          surname: data.surname,
-          email: data.email,
+         ...data,
           password: await hash(newPwd, 10),
         },
       });
