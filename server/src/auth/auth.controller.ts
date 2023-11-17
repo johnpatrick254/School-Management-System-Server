@@ -13,13 +13,14 @@ import * as Jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { Public } from './publicroute.decorator';
+import { extractBearerToken } from './Util/extracttoken.util';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly config: ConfigService,
-  ) {}
+  ) { }
 
   @Public()
   @Post('login/student')
@@ -29,16 +30,18 @@ export class AuthController {
   ) {
     const secret = this.config.get('SECRET');
 
-    const { password, ...currentStudent } =
+    const { password, EOC, ...currentStudent } =
       await this.authService.loginStudent(data);
 
-    const cookie = Jwt.sign(currentStudent, secret, {
+    const token = Jwt.sign(currentStudent, secret, {
       expiresIn: '1h',
     });
-    res
-      .cookie('session', cookie, { httpOnly: true, maxAge: 3600 })
-      .send(currentStudent);
+
+
+    res.status(200).send({ accessToken: token });
   }
+
+
   @Public()
   @Post('login/staff')
   async loginStaff(
@@ -50,27 +53,27 @@ export class AuthController {
     const { password, ...currentStudent } =
       await this.authService.loginStaff(data);
 
-    const cookie = Jwt.sign(currentStudent, secret, {
+    const token = Jwt.sign(currentStudent, secret, {
       expiresIn: '1h',
     });
-    res
-      .cookie('session', cookie, { httpOnly: true, maxAge: 3600 })
-      .send(currentStudent);
+    res.send({ accessToken: token });
   }
 
   @Get('logout')
-  logout(@Res() res: Response): void {
+  logout(@Res({ passthrough: true }) res: Response): void {
     res
-      .cookie('session', { httpOnly: true, maxAge: 0 })
+      .cookie('user', { httpOnly: true, maxAge: 0 })
       .status(200)
       .send({ message: 'Logged out successfully' });
   }
 
   @Get('validate')
   async validateToken(@Req() req: Request, @Res() res: Response) {
-    const accessToken = req.cookies['session'];
+    const { authorization } = req.headers;
+    const accessToken = extractBearerToken(authorization);
     if (!accessToken) throw new UnauthorizedException();
     const isValid = this.authService.validateUser(accessToken);
     if (isValid === true) res.status(200);
   }
 }
+
