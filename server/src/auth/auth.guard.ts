@@ -19,8 +19,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
     private reflector: Reflector,
-    private readonly prisma: PrismaService
-  ) { }
+    private readonly prisma: PrismaService,
+  ) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -30,20 +30,24 @@ export class AuthGuard implements CanActivate {
     ]);
     const req: Request = context.switchToHttp().getRequest();
     const { authorization } = req.headers;
-    const requiredPermission = this.reflector.get(RequiredPermission, context.getHandler()) as Partial<PermissionType>
+    const requiredPermission = this.reflector.get(
+      RequiredPermission,
+      context.getHandler(),
+    ) as Partial<PermissionType>;
     const token = extractBearerToken(authorization);
-    if (!token) throw new UnauthorizedException();
 
     if (isPublic) {
       if (requiredPermission) {
-        return this.authService.validateUserPerms(requiredPermission,token);  
+        if (!token) throw new UnauthorizedException();
+        return this.authService.validateUserPerms(requiredPermission, token);
       }
       return true;
     }
-   
+
+    if (!token) throw new UnauthorizedException();
     this.authService.validateUser(token);
     if (requiredPermission) {
-      return this.authService.validateUserPerms(requiredPermission,token);  
+      return this.authService.validateUserPerms(requiredPermission, token);
     }
 
     return true;
