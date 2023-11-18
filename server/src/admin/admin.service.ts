@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/database.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../database/database.service';
 
 @Injectable()
 export class AdminService {
   constructor(private prisma: PrismaService) {}
 
   async getAdminById(id: string) {
-    const { password, ...admin } = await this.prisma.admin.findUnique({
+    const admin  = await this.prisma.admin.findUnique({
       where: {
         id,
       },
@@ -16,6 +16,10 @@ export class AdminService {
         },
       },
     });
-    return admin;
+     
+    if(!admin) throw new NotFoundException('Admin does not exist');
+
+    const {password,...adminData} = admin;
+    return adminData;
   }
 }
