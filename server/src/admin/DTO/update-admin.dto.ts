@@ -1,11 +1,15 @@
-import { IsString,IsOptional } from "class-validator";
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
-export class UpdateAdminDTO{
-    @IsOptional()
-    @IsString()
-    name: string;
-    
-    @IsOptional()
-    @IsString()
-    surname:string;
+export class UpdateAdminDTO {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  surname: string;
 }
