@@ -1,32 +1,68 @@
 import { Permission, PermissionType, PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
 // Permissions
 const seed = async () => {
   const permissions = [
-    'EDIT_STUDENT',
-    'VIEW_STUDENT',
-    'CREATE_STUDENT',
-    'DELETE_STUDENT',
+    { type: PermissionType.EDIT_STUDENT },
+    { type: PermissionType.VIEW_STUDENT },
+    { type: PermissionType.EDIT_TEACHER },
+    { type: PermissionType.VIEW_TEACHER },
+    { type: PermissionType.VIEW_ADMIN },
+    { type: PermissionType.EDIT_ADMIN },
+    { type: PermissionType.VIEW_ACCOUNTANT },
+    { type: PermissionType.EDIT_ACCOUNTANT },
+    { type: PermissionType.SUPER_ADMIN },
   ];
-  const savedPermissions: Permission[] = [];
-  permissions.map(async (permission: PermissionType) => {
-    const createdPermission = await prisma.permission.create({
-      data: { type: permission },
-    });
-    savedPermissions.push(createdPermission);
+
+  const createdPermission = await prisma.permission.createMany({
+    data: permissions,
+  });
+  console.log(createdPermission);
+
+  const superAdminPermission = await prisma.permission.findMany();
+  const adminPermission = await prisma.permission.findMany({
+    where: { NOT: { type: 'SUPER_ADMIN' } },
+  });
+  const teacherPermission = await prisma.permission.findMany({
+    where: {
+      type: {
+        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'EDIT_TEACHER'],
+      },
+    },
+  });
+  const accountantPermission = await prisma.permission.findMany({
+    where: { type: { in: ['VIEW_ACCOUNTANT', 'EDIT_ACCOUNTANT'] } },
+  });
+  const studentPermission = await prisma.permission.findMany({
+    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT'] } },
   });
 
   // Super Admin
   await prisma.admin.create({
     data: {
-      code: 'admin-001',
+      code: 'super-admin-001',
       name: 'super',
       surname: 'admin',
       email: 'super-admin@gmail.com',
-      password: '1234',
+      password: await hash('1234', 10),
       permissions: {
-        connect: savedPermissions,
+        connect: superAdminPermission,
+      },
+    },
+  });
+
+  // Admin
+  await prisma.admin.create({
+    data: {
+      code: 'admin-001',
+      name: 'admin',
+      surname: 'admin',
+      email: 'admin@gmail.com',
+      password: await hash('1234', 10),
+      permissions: {
+        connect: adminPermission,
       },
     },
   });
@@ -38,9 +74,9 @@ const seed = async () => {
       name: 'teacher',
       surname: '001',
       email: 'teacher-001@gmail.com',
-      password: '1234',
+      password: await hash('1234', 10),
       permissions: {
-        connect: savedPermissions,
+        connect: teacherPermission,
       },
     },
   });
@@ -80,12 +116,26 @@ const seed = async () => {
       name: 'student',
       surname: '001',
       email: 'student-001@gmail.com',
-      password: '1234',
+      password: await hash('1234', 10),
       cohortId: cohort.id,
       EOC: eoc,
       sectionId: section.id,
       permissions: {
-        connect: savedPermissions,
+        connect: studentPermission,
+      },
+    },
+  });
+
+  // Accountant
+  await prisma.accountant.create({
+    data: {
+      code: 'accountant-001',
+      name: 'accountant',
+      surname: '001',
+      email: 'accountant-001@gmail.com',
+      password: await hash('1234', 10),
+      permissions: {
+        connect: accountantPermission,
       },
     },
   });

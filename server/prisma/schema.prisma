@@ -20,13 +20,18 @@ enum UserType {
 enum PermissionType {
   EDIT_STUDENT
   VIEW_STUDENT
-  CREATE_STUDENT
-  DELETE_STUDENT
+  EDIT_ADMIN
+  VIEW_ADMIN
+  EDIT_TEACHER
+  VIEW_TEACHER
+  EDIT_ACCOUNTANT
+  VIEW_ACCOUNTANT
+  SUPER_ADMIN
 }
 
 model Permission {
   id          String         @id @default(cuid())
-  type        PermissionType
+  type        PermissionType @unique
   students    Student[]
   teachers    Teacher[]
   accountants Accountant[]

@@ -8,7 +8,13 @@ import {
 import { loginDTO } from './DTO/login.dto';
 import { compare } from 'bcrypt';
 import { PrismaService } from 'src/database/database.service';
-import { Accountant, Admin, PermissionType, Student, Teacher } from '@prisma/client';
+import {
+  Accountant,
+  Admin,
+  PermissionType,
+  Student,
+  Teacher,
+} from '@prisma/client';
 import { decode, verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { logger } from 'src/lib/logger';
@@ -18,7 +24,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
-  ) { }
+  ) {}
 
   async loginStudent(data: loginDTO): Promise<Student> {
     const currentUser = await this.prisma.student.findUnique({
@@ -28,10 +34,10 @@ export class AuthService {
       include: {
         permissions: {
           select: {
-            id: true
-          }
-        }
-      }
+            id: true,
+          },
+        },
+      },
     });
 
     if (!currentUser)
@@ -50,6 +56,13 @@ export class AuthService {
       where: {
         code: data.code,
       },
+      include: {
+        permissions: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
 
     if (isTeacher) {
@@ -65,6 +78,13 @@ export class AuthService {
       where: {
         code: data.code,
       },
+      include: {
+        permissions: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
 
     if (isAdmin) {
@@ -79,6 +99,13 @@ export class AuthService {
     const isAccountant = await this.prisma.accountant.findFirst({
       where: {
         code: data.code,
+      },
+      include: {
+        permissions: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
@@ -105,20 +132,27 @@ export class AuthService {
     }
   }
 
-  async validateUserPerms(requiredPermission: PermissionType, accessToken: string): Promise<boolean> {
+  async validateUserPerms(
+    requiredPermission: PermissionType,
+    accessToken: string,
+  ): Promise<boolean> {
     const secret = this.config.get('SECRET');
-   
-      if (!verify(accessToken, secret)) throw new UnauthorizedException();
-      const userData = decode(accessToken) as { permissions: { id: string }[] };
 
-      const perm = await this.prisma.permission.findFirst({
-        where: {
-          type: requiredPermission,
-        }
-      })
-      if (!userData.permissions.some(userPerm => userPerm.id === perm.id)) throw new HttpException("You do not have permission to process this request", HttpStatus.FORBIDDEN);
-      return true;
-    
+    if (!verify(accessToken, secret)) throw new UnauthorizedException();
+    const userData = decode(accessToken) as { permissions: { id: string }[] };
+    console.log(userData);
+
+    const perm = await this.prisma.permission.findFirst({
+      where: {
+        type: requiredPermission,
+      },
+    });
+
+    if (!userData.permissions.some((userPerm) => userPerm.id === perm.id))
+      throw new HttpException(
+        'You do not have permission to process this request',
+        HttpStatus.FORBIDDEN,
+      );
+    return true;
   }
-
 }

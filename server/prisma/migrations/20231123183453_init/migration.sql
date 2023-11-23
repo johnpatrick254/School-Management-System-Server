@@ -2,7 +2,7 @@
 CREATE TYPE "UserType" AS ENUM ('STUDENT', 'TEACHER', 'ACCOUNTANT', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "PermissionType" AS ENUM ('EDIT_STUDENT', 'VIEW_STUDENT', 'CREATE_STUDENT', 'DELETE_STUDENT');
+CREATE TYPE "PermissionType" AS ENUM ('EDIT_STUDENT', 'VIEW_STUDENT', 'EDIT_ADMIN', 'VIEW_ADMIN', 'EDIT_TEACHER', 'VIEW_TEACHER', 'EDIT_ACCOUNTANT', 'VIEW_ACCOUNTANT', 'SUPER_ADMIN');
 
 -- CreateEnum
 CREATE TYPE "PaymentPurpose" AS ENUM ('FEES', 'EXTRA_CURRICULAR', 'DAMAGES');
@@ -313,6 +313,9 @@ CREATE TABLE "_FeeToTransactions" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Permission_type_key" ON "Permission"("type");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Student_code_key" ON "Student"("code");

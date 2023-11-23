@@ -20,7 +20,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly config: ConfigService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('login/student')
@@ -37,10 +37,8 @@ export class AuthController {
       expiresIn: '1h',
     });
 
-
     res.status(200).send({ accessToken: token });
   }
-
 
   @Public()
   @Post('login/staff')
@@ -50,10 +48,10 @@ export class AuthController {
   ) {
     const secret = this.config.get('SECRET');
 
-    const { password, ...currentStudent } =
+    const { password, ...currentStaff } =
       await this.authService.loginStaff(data);
 
-    const token = Jwt.sign(currentStudent, secret, {
+    const token = Jwt.sign(currentStaff, secret, {
       expiresIn: '1h',
     });
     res.send({ accessToken: token });
@@ -76,4 +74,3 @@ export class AuthController {
     if (isValid === true) res.status(200);
   }
 }
-

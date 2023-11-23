@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RegisterModule } from './register/register.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { AuthGuard } from './auth/auth.guard';
     DatabaseModule,
     RegisterModule,
     AuthModule,
+    AdminModule,
   ],
   providers: [
     {
