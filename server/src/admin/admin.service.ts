@@ -36,7 +36,19 @@ export class AdminService {
   async getAdmins(limit: number): Promise<Partial<Admin>[]> {
     const admins = await this.prisma.admin.findMany({
       take: limit,
-      select: { password: false },
+      select: {
+        id: true,
+        code: true,
+        email: true,
+        name: true,
+        surname: true,
+        isActive: true,
+        permissions: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
     return admins;
   }
