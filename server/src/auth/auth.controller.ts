@@ -20,7 +20,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly config: ConfigService,
-  ) {}
+  ) { }
 
   @Public()
   @Post('login/student')
@@ -34,10 +34,10 @@ export class AuthController {
       await this.authService.loginStudent(data);
 
     const token = Jwt.sign(currentStudent, secret, {
-      expiresIn: '1h',
+      expiresIn: '24h',
     });
 
-    res.status(200).send({ accessToken: token });
+    res.cookie("session", token, { httpOnly: true, expires: new Date(Date.now() + (60 * 60 * 60 * 24 * 1000)) }).status(200).send({ user: token });
   }
 
   @Public()
@@ -52,15 +52,15 @@ export class AuthController {
       await this.authService.loginStaff(data);
 
     const token = Jwt.sign(currentStaff, secret, {
-      expiresIn: '1h',
+      expiresIn: '24h',
     });
-    res.send({ accessToken: token });
+    res.cookie("session", token, { httpOnly: true, expires: new Date(Date.now() + (60 * 60 * 60 * 24 * 1000)) }).status(200).send({ user: token });
   }
 
   @Get('logout')
   logout(@Res({ passthrough: true }) res: Response): void {
     res
-      .cookie('user', { httpOnly: true, maxAge: 0 })
+      .cookie('session', "", { httpOnly: true, maxAge: 0 })
       .status(200)
       .send({ message: 'Logged out successfully' });
   }
