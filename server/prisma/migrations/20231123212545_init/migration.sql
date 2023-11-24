@@ -89,6 +89,7 @@ CREATE TABLE "Course" (
 CREATE TABLE "Cohort" (
     "code" TEXT NOT NULL,
     "id" TEXT NOT NULL,
+    "year" INTEGER NOT NULL DEFAULT EXTRACT(YEAR FROM NOW()),
     "name" TEXT NOT NULL,
     "careerId" TEXT NOT NULL,
 
