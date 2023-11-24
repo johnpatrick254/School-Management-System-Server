@@ -3,10 +3,6 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class CreateTeacherDTO {
   @IsNotEmpty()
   @IsString()
-  code: string;
-
-  @IsNotEmpty()
-  @IsString()
   name: string;
 
   @IsNotEmpty()
@@ -21,10 +17,6 @@ export class CreateTeacherDTO {
 export class CreateAdminDTO {
   @IsNotEmpty()
   @IsString()
-  code: string;
-
-  @IsNotEmpty()
-  @IsString()
   name: string;
 
   @IsNotEmpty()
@@ -37,10 +29,6 @@ export class CreateAdminDTO {
 }
 
 export class CreateAccountantDTO {
-  @IsNotEmpty()
-  @IsString()
-  code: string;
-
   @IsNotEmpty()
   @IsString()
   name: string;
