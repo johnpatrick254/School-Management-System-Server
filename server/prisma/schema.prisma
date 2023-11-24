@@ -27,6 +27,7 @@ enum PermissionType {
   EDIT_ACCOUNTANT
   VIEW_ACCOUNTANT
   SUPER_ADMIN
+  CREATE_STAFF
 }
 
 model Permission {
