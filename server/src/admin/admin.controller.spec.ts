@@ -14,6 +14,7 @@ describe('AdminController', () => {
     name: 'ADMIN',
     surname: '1',
     email: '123@mail.com',
+    year: 2023,
     permissions: [{ id: 'xyz' }],
     isActive: true,
   };

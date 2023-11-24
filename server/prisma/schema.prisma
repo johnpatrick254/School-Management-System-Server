@@ -67,6 +67,7 @@ model Teacher {
   name        String
   surname     String
   email       String       @unique
+  year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
   isActive    Boolean      @default(true)
   Courses     Course[]
@@ -82,6 +83,7 @@ model Accountant {
   name         String
   surname      String
   email        String         @unique
+  year         Int            @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password     String
   isActive     Boolean        @default(true)
   transactions Transactions[]
@@ -94,6 +96,7 @@ model Admin {
   name        String
   surname     String
   email       String       @unique
+  year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
   isActive    Boolean      @default(true)
   permissions Permission[]
@@ -120,6 +123,7 @@ model Course {
 model Cohort {
   code     String
   id       String    @id @default(cuid())
+  year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id])
