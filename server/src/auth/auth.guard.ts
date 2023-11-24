@@ -9,7 +9,6 @@ import { AuthService } from './auth.service';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './publicroute.decorator';
-import { extractBearerToken } from './Util/extracttoken.util';
 import { RequiredPermission } from 'src/auth/permision.decorator';
 import { PrismaService } from 'src/database/database.service';
 import { PermissionType } from '@prisma/client';
@@ -19,8 +18,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
     private reflector: Reflector,
-    private readonly prisma: PrismaService,
-  ) {}
+  ) { }
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -29,12 +27,12 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     const req: Request = context.switchToHttp().getRequest();
-    const { authorization } = req.headers;
     const requiredPermission = this.reflector.get(
       RequiredPermission,
       context.getHandler(),
     ) as Partial<PermissionType>;
-    const token = extractBearerToken(authorization);
+
+    const token = req.cookies.session;
 
     if (isPublic) {
       if (requiredPermission) {

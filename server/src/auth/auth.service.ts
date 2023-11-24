@@ -24,7 +24,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
-  ) {}
+  ) { }
 
   async loginStudent(data: loginDTO): Promise<Student> {
     const currentUser = await this.prisma.student.findUnique({
