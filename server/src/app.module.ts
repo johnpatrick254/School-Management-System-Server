@@ -5,6 +5,7 @@ import { RegisterModule } from './register/register.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminModule } from './admin/admin.module';
+import { CohortModule } from './cohort/cohort.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
     RegisterModule,
     AuthModule,
     AdminModule,
+    CohortModule,
   ],
   providers: [
     {
