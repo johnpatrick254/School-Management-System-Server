@@ -48,7 +48,7 @@ model Student {
   isActive          Boolean            @default(true)
   EOC               DateTime
   cohortId          String
-  cohort            Cohort             @relation(fields: [cohortId], references: [id])
+  cohort            Cohort             @relation(fields: [cohortId], references: [id], onUpdate: Cascade)
   sectionId         String
   section           Section            @relation(fields: [sectionId], references: [id])
   courses           Course[]
@@ -121,7 +121,7 @@ model Course {
 }
 
 model Cohort {
-  code     String
+  code     String    @unique
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   name     String
@@ -134,7 +134,7 @@ model Cohort {
 
 model Career {
   id        String     @id @default(cuid())
-  code      String
+  code      String     @unique
   name      String
   cost      Int
   semesters Semester[]
@@ -144,7 +144,7 @@ model Career {
 
 model Semester {
   id       String   @id @default(cuid())
-  code     String
+  code     String   @unique
   name     String
   careerId String
   career   Career   @relation(fields: [careerId], references: [id])
@@ -184,7 +184,7 @@ model Transactions {
 }
 
 model Assignment {
-  code              String
+  code              String             @unique
   id                String             @id @default(cuid())
   name              String
   autoMark          Boolean
@@ -197,7 +197,7 @@ model Assignment {
 }
 
 model Exam {
-  code       String
+  code       String       @unique
   id         String       @id @default(cuid())
   totalMarks Int
   autoMark   Boolean
