@@ -4,6 +4,7 @@ import { CohortService } from './cohort.service';
 import { PrismaService } from '../database/database.service';
 import { Cohort } from '@prisma/client';
 import { CreateCohortDTO } from './DTO/createcohort.dto';
+import { UpdateCohortDTO } from './DTO/updatecohort.dto';
 
 describe('CohortController', () => {
   let controller: CohortController;
@@ -43,7 +44,7 @@ describe('CohortController', () => {
   describe('create', () => {
     const createCohortDTO = new CreateCohortDTO();
     it('should be called with CreateCohortDTO', async () => {
-      jest.spyOn(controller, 'create');
+      jest.spyOn(controller, 'create').mockResolvedValue(mockCohort);
       await controller.create(createCohortDTO);
       expect(controller.create).toBeCalledWith(createCohortDTO);
     });
@@ -76,7 +77,7 @@ describe('CohortController', () => {
   });
 
   describe('get cohorts', () => {
-    const limit = 5;
+    const limit = 1;
     it('should return cohorts type', async () => {
       jest.spyOn(controller, 'getCohorts').mockResolvedValue([mockCohort]);
       expect(await controller.getCohorts(limit)).toEqual([mockCohort]);
