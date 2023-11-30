@@ -13,6 +13,8 @@ const seed = async () => {
     { type: PermissionType.EDIT_ADMIN },
     { type: PermissionType.VIEW_ACCOUNTANT },
     { type: PermissionType.EDIT_ACCOUNTANT },
+    { type: PermissionType.EDIT_COHORT },
+    { type: PermissionType.VIEW_COHORT },
     { type: PermissionType.SUPER_ADMIN },
     { type: PermissionType.CREATE_STAFF },
   ];

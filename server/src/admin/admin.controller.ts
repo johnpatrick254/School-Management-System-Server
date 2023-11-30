@@ -12,7 +12,7 @@ import {
 import { AdminService } from './admin.service';
 import { UpdatePasswordDTO } from '../core/DTO/update-password.dto';
 import { UpdateAdminDTO } from './DTO/update-admin.dto';
-import { RequiredPermission } from 'src/auth/permision.decorator';
+import { RequiredPermission } from '../auth/permision.decorator';
 
 @Controller('admin')
 export class AdminController {
@@ -52,8 +52,8 @@ export class AdminController {
   }
 
   @RequiredPermission('SUPER_ADMIN')
-  @Delete(':id')
-  async delete(@Param('id') id: string) {
+  @Delete()
+  async delete(@Query('id') id: string) {
     return await this.adminService.delete(id);
   }
 }

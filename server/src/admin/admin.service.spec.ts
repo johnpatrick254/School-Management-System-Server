@@ -14,6 +14,7 @@ describe('AdminService', () => {
     name: 'ADMIN',
     surname: '1',
     email: '123@mail.com',
+    year: 2023,
     password: 'xyz',
     isActive: true,
   };
@@ -24,6 +25,7 @@ describe('AdminService', () => {
     name: 'ADMIN',
     surname: '1',
     email: '123@mail.com',
+    year: 2023,
     permissions: [{ id: 'xyz' }],
     isActive: true,
   };

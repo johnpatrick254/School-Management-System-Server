@@ -88,6 +88,7 @@ export class RegisterService {
               'EDIT_STUDENT',
               'VIEW_TEACHER',
               'EDIT_TEACHER',
+              'VIEW_COHORT'
             ],
           },
         },
