@@ -4,7 +4,7 @@ import { PrismaService } from '../database/database.service';
 import { Cohort } from '@prisma/client';
 import { CreateCohortDTO } from './DTO/createcohort.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { UpdateAdminDTO } from 'src/admin/DTO/update-admin.dto';
+import { UpdateCohortDTO } from './DTO/updatecohort.dto';
 
 describe('CohortService', () => {
   let service: CohortService;
@@ -72,24 +72,24 @@ describe('CohortService', () => {
   });
 
   describe('update cohort', () => {
-    const updateCohortDTO = new UpdateAdminDTO();
+    const { id, ...data } = new UpdateCohortDTO();
     it('should be called with UpdateCohortDTO', async () => {
-      jest.spyOn(service, 'update');
-      await service.update(updateCohortDTO);
-      expect(service.update).toBeCalledWith(updateCohortDTO);
+      jest.spyOn(service, 'update').mockResolvedValue(mockCohort);
+      await service.update(id, data);
+      expect(service.update).toBeCalledWith(id, data);
     });
 
     it('should throw NotFoundException() when there is no cohort', async () => {
       jest.spyOn(prisma.cohort, 'update').mockResolvedValue(null);
-      await expect(service.update(updateCohortDTO)).rejects.toThrow(
+      await expect(service.update(id, data)).rejects.toThrow(
         new NotFoundException('cohort not found'),
       );
     });
 
     it('should return updated cohort type', async () => {
-      jest.spyOn(service, 'update');
-      expect(await service.update(updateCohortDTO)).toEqual(mockCohort);
-    });
+      jest.spyOn(service, 'update').mockResolvedValue(mockCohort);
+      expect(await service.update(id, data)).toEqual(mockCohort);
+     });
   });
 
   describe('get cohort by Id', () => {
@@ -124,7 +124,8 @@ describe('CohortService', () => {
           mockCohort,
           mockCohort,
         ]);
-      expect(await service.getCohorts(limit).length).toEqual(limit);
+      const cohorts = await service.getCohorts(limit)
+      expect(cohorts.length).toEqual(limit);
     });
   });
 
