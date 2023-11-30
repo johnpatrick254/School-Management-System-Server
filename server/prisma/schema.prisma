@@ -27,6 +27,8 @@ enum PermissionType {
   EDIT_ACCOUNTANT
   VIEW_ACCOUNTANT
   SUPER_ADMIN
+  VIEW_COHORT
+  EDIT_COHORT
 }
 
 model Permission {
