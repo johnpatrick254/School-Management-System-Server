@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCohortDTO {
   @IsOptional()
@@ -12,4 +12,9 @@ export class UpdateCohortDTO {
   @IsOptional()
   @IsString()
   careerId: string;
+  
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
 }
