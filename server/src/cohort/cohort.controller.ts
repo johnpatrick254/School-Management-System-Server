@@ -11,7 +11,7 @@ export class CohortController {
 
     @RequiredPermission("EDIT_COHORT")
     @Post()
-    async create(data: CreateCohortDTO): Promise<Cohort> {
+    async create(@Body() data: CreateCohortDTO): Promise<Cohort> {
         return this.service.create(data);
     }
 
@@ -25,7 +25,7 @@ export class CohortController {
     @RequiredPermission("VIEW_COHORT")
     @Get(':id')
     async getCohortById(@Param('id') id: string): Promise<Cohort> {
-        return this.getCohortById(id);
+        return this.service.getCohortById(id);
     }
 
     @RequiredPermission("VIEW_COHORT")
@@ -36,7 +36,7 @@ export class CohortController {
 
     @RequiredPermission("EDIT_COHORT")
     @Delete(':id')
-    async delete(@Query('id') id: string){
+    async delete(@Param('id') id: string){
         return this.service.delete(id)
     }
     
