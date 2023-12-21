@@ -129,7 +129,7 @@ model Cohort {
   name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id])
-  sections Section[]
+  sections Section[] 
   students Student[]
   course   Course[]
 }
@@ -148,6 +148,7 @@ model Semester {
   id       String   @id @default(cuid())
   code     String   @unique
   name     String
+  year     String
   careerId String
   career   Career   @relation(fields: [careerId], references: [id])
   courses  Course[]
