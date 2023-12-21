@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CareerService } from './career.service';
 import { PrismaService } from '../database/database.service';
-import { Career, Cohort } from '@prisma/client';
+import { Career } from '@prisma/client';
 import { CreateCareerDTO } from './DTO/createcareer.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { UpdateCareerDTO } from './DTO/updatecareer.dto';
 
-describe('CohortService', () => {
+describe('CareerService', () => {
   let service: CareerService;
   let prisma: PrismaService;
   const mockCareer: Career = {
@@ -109,8 +109,8 @@ describe('CohortService', () => {
     const limit = 5;
     it('should return an empty array when there is no career', async () => {
       jest.spyOn(prisma.career, 'findMany').mockResolvedValue([]);
-      const cohorts = await service.getCareers(limit);
-      expect(cohorts.length).toEqual(0);
+      const careers = await service.getCareers(limit);
+      expect(careers.length).toEqual(0);
     });
 
     it('should return number of career equal to limit', async () => {
@@ -123,8 +123,8 @@ describe('CohortService', () => {
           mockCareer,
           mockCareer,
         ]);
-      const cohorts = await service.getCareers(limit)
-      expect(cohorts.length).toEqual(limit);
+      const careers = await service.getCareers(limit)
+      expect(careers.length).toEqual(limit);
     });
   });
 
