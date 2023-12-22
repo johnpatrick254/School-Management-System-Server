@@ -4,14 +4,15 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Career, PrismaClient } from '@prisma/client';
+import { Career } from '@prisma/client';
 import { CreateCareerDTO } from './DTO/createcareer.dto';
-import { logger } from 'src/lib/logger';
+import { logger } from '../lib/logger';
 import { UpdateCareerDTO } from './DTO/updatecareer.dto';
+import { PrismaService } from '../database/database.service';
 
 @Injectable()
 export class CareerService {
-  constructor(readonly prisma: PrismaClient) {}
+  constructor(readonly prisma: PrismaService) {}
 
   async create(data: CreateCareerDTO): Promise<Career> {
     try {
