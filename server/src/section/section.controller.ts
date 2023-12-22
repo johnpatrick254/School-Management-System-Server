@@ -15,9 +15,10 @@ export class SectionController {
     }
 
     @RequiredPermission("EDIT_SECTION")
-    @Put()
-    async update(@Body() data: UpdateSectionDTO): Promise<Section> {
-        return await this.sectionService.update(data);
+    @Put('/:id')
+    async update(@Param('id') id:string,@Body() data: UpdateSectionDTO): Promise<Section> {
+        if(id === "" || !id) throw new HttpException("No Limit provided",HttpStatus.UNPROCESSABLE_ENTITY)
+        return await this.sectionService.update(id,data);
     }
 
     @RequiredPermission("VIEW_SECTION")
@@ -28,8 +29,8 @@ export class SectionController {
 
     @RequiredPermission("VIEW_SECTION")
     @Get()
-    async getSections(@Query('id') limit: string): Promise<Section[]> {
-        if(limit === "" ||!limit) throw new HttpException("No Limit provided",HttpStatus.UNPROCESSABLE_ENTITY)
+    async getSections(@Query('limit') limit: string): Promise<Section[]> {
+        if(limit === "" || !limit) throw new HttpException("No Limit provided",HttpStatus.UNPROCESSABLE_ENTITY)
         return await this.sectionService.getSections(+limit);
     }
     @RequiredPermission("EDIT_SECTION")

@@ -55,16 +55,17 @@ describe('SectionController', () => {
   });
 
   describe('update', () => {
-    const { id, ...data } = new UpdateSectionDTO();
+    const updateSectionDTO = new UpdateSectionDTO();
+    const id= '1'
     it('should be called with UpdateSectionDTO', async () => {
       jest.spyOn(controller, 'update').mockResolvedValue(mockSection);
-      await controller.update({ id, ...data });
-      expect(controller.update).toBeCalledWith({ id, ...data });
+      await controller.update( id, updateSectionDTO );
+      expect(controller.update).toBeCalledWith( id, updateSectionDTO );
     });
 
     it('should return section type', async () => {
       jest.spyOn(controller, 'update').mockResolvedValue(mockSection);
-      expect(await controller.update({ id, ...data })).toEqual(mockSection);
+      expect(await controller.update(id, updateSectionDTO )).toEqual(mockSection);
     });
   });
 

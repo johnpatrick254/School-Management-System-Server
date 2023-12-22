@@ -71,23 +71,24 @@ describe('SectionService', () => {
   });
 
   describe('update section', () => {
-    const { id, ...data } = new UpdateSectionDTO();
+    const updateSectionDTO = new UpdateSectionDTO();
+    const id= '1'
     it('should be called with UpdateSectionDTO', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockSection);
-      await service.update({id,... data});
-      expect(service.update).toBeCalledWith({id,... data});
+      await service.update(id,updateSectionDTO);
+      expect(service.update).toBeCalledWith(id,updateSectionDTO);
     });
 
     it('should throw NotFoundException() when there is no section', async () => {
       jest.spyOn(prisma.section, 'update').mockResolvedValue(null);
-      await expect(service.update({id, ...data})).rejects.toThrow(
+      await expect(service.update(id,updateSectionDTO)).rejects.toThrow(
         new NotFoundException('section not found'),
       );
     });
 
     it('should return updated section type', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockSection);
-      expect(await service.update({id, ...data})).toEqual(mockSection);
+      expect(await service.update(id,updateSectionDTO)).toEqual(mockSection);
     });
   });
 
