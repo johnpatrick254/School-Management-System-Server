@@ -35,8 +35,8 @@ export class SectionService {
         return section;
     }
 
-    async update(data: UpdateSectionDTO): Promise<Section> {
-        const { id, ...updates } = data;
+    async update(id: string, updates: UpdateSectionDTO): Promise<Section> {
+
         const updatedSection = await this.prismaService.section.update({
             where: { id },
             data: updates
@@ -45,8 +45,13 @@ export class SectionService {
         return updatedSection;
     }
     async delete(id: string): Promise<null> {
-        const deletedSection = await this.prismaService.section.delete({ where: { id } })
-        if (!deletedSection) throw new NotFoundException('section not found')
+        const deletedSection = await this.prismaService.section.findUnique({ where: { id } });
+        if (!deletedSection) throw new NotFoundException('section not found');
+        try {
+            await this.prismaService.section.delete({ where: { id } })
+        } catch (error) {
+            logger.log(error)
+        }
         return null;
     }
 
