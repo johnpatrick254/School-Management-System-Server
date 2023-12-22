@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { CareerService } from './career.service';
-import { RequiredPermission } from 'src/auth/permision.decorator';
+import { RequiredPermission } from '../auth/permision.decorator';
 import { CreateCareerDTO } from './DTO/createcareer.dto';
 import { Career } from '@prisma/client';
 import { UpdateCareerDTO } from './DTO/updatecareer.dto';
