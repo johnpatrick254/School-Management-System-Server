@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateSectionDTO } from './DTO/createsection.dto';
 import { SectionService } from './section.service';
 import { Section } from '@prisma/client';
@@ -29,6 +29,7 @@ export class SectionController {
     @RequiredPermission("VIEW_SECTION")
     @Get()
     async getSections(@Query('id') limit: string): Promise<Section[]> {
+        if(limit === "" ||!limit) throw new HttpException("No Limit provided",HttpStatus.UNPROCESSABLE_ENTITY)
         return await this.sectionService.getSections(+limit);
     }
     @RequiredPermission("EDIT_SECTION")
