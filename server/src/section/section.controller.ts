@@ -3,7 +3,7 @@ import { CreateSectionDTO } from './DTO/createsection.dto';
 import { SectionService } from './section.service';
 import { Section } from '@prisma/client';
 import { UpdateSectionDTO } from './DTO/updatesection.dto';
-import { RequiredPermission } from 'src/auth/permision.decorator';
+import { RequiredPermission } from '../../src/auth/permision.decorator';
 
 @Controller('section')
 export class SectionController {
