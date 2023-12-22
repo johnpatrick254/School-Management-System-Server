@@ -1,6 +1,4 @@
-
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
-import { semester } from './createcareer.dto';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCareerDTO {
   @IsOptional()
@@ -15,7 +13,7 @@ export class UpdateCareerDTO {
   @IsNumber()
   cost: number;
 
-  
-  @IsOptional()
-  semesters: semester;
+  @IsNotEmpty()
+  @IsString()
+  id: string;
 }
