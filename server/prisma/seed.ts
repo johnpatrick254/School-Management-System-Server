@@ -16,7 +16,11 @@ const seed = async () => {
     { type: PermissionType.EDIT_COHORT },
     { type: PermissionType.VIEW_COHORT },
     { type: PermissionType.SUPER_ADMIN },
-    { type: PermissionType.CREATE_STAFF},
+    { type: PermissionType.CREATE_STAFF },
+    { type: PermissionType.CREATE_CAREER },
+    { type: PermissionType.VIEW_CAREER },
+    { type: PermissionType.EDIT_CAREER },
+    { type: PermissionType.UPDATE_CAREER },
   ];
 
   const createdPermission = await prisma.permission.createMany({

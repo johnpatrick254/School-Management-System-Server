@@ -29,6 +29,11 @@ enum PermissionType {
   SUPER_ADMIN
   VIEW_COHORT
   EDIT_COHORT
+  CREATE_STAFF
+  CREATE_CAREER
+  VIEW_CAREER
+  EDIT_CAREER
+  UPDATE_CAREER
 }
 
 model Permission {
@@ -129,7 +134,7 @@ model Cohort {
   name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id])
-  sections Section[] 
+  sections Section[]
   students Student[]
   course   Course[]
 }
