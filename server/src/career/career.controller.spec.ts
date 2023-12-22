@@ -48,7 +48,7 @@ describe('CareerController', () => {
       expect(controller.create).toBeCalledWith(createCareerDTO);
     });
 
-    it('should return cohort type', async () => {
+    it('should return career type', async () => {
       jest.spyOn(controller, 'create').mockResolvedValue(mockCareer);
       expect(await controller.create(createCareerDTO)).toEqual(mockCareer);
     });
