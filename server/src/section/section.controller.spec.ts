@@ -58,13 +58,13 @@ describe('SectionController', () => {
     const { id, ...data } = new UpdateSectionDTO();
     it('should be called with UpdateSectionDTO', async () => {
       jest.spyOn(controller, 'update').mockResolvedValue(mockSection);
-      await controller.update(id, data);
-      expect(controller.update).toBeCalledWith(id, data);
+      await controller.update({ id, ...data });
+      expect(controller.update).toBeCalledWith({ id, ...data });
     });
 
     it('should return section type', async () => {
       jest.spyOn(controller, 'update').mockResolvedValue(mockSection);
-      expect(await controller.update(id, data)).toEqual(mockSection);
+      expect(await controller.update({ id, ...data })).toEqual(mockSection);
     });
   });
 
@@ -75,8 +75,8 @@ describe('SectionController', () => {
     });
   });
 
-  describe('get section', () => {
-    const limit = 1;
+  describe('get sections', () => {
+    const limit = '1';
     it('should return section type', async () => {
       jest.spyOn(controller, 'getSections').mockResolvedValue([mockSection]);
       expect(await controller.getSections(limit)).toEqual([mockSection]);
@@ -85,7 +85,7 @@ describe('SectionController', () => {
     it('should limit the result to the limit amount', async () => {
       jest.spyOn(controller, 'getSections').mockResolvedValue([mockSection]);
       const section = await controller.getSections(limit);
-      expect(section.length).toEqual(limit);
+      expect(section.length).toEqual(+limit);
     });
 
     it('should return an empty array when there is no section', async () => {
