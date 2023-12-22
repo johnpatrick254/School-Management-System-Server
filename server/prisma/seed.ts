@@ -31,7 +31,7 @@ const seed = async () => {
   const teacherPermission = await prisma.permission.findMany({
     where: {
       type: {
-        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'EDIT_TEACHER'],
+        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION"],
       },
     },
   });

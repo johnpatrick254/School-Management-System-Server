@@ -18,6 +18,7 @@ enum UserType {
 }
 
 enum PermissionType {
+  CREATE_STAFF
   EDIT_STUDENT
   VIEW_STUDENT
   EDIT_ADMIN
@@ -29,6 +30,9 @@ enum PermissionType {
   SUPER_ADMIN
   VIEW_COHORT
   EDIT_COHORT
+  EDIT_SECTION
+  VIEW_SECTION
+  CREATE_SECTION
 }
 
 model Permission {
