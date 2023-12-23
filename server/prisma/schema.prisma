@@ -18,6 +18,7 @@ enum UserType {
 }
 
 enum PermissionType {
+  CREATE_STAFF
   EDIT_STUDENT
   VIEW_STUDENT
   EDIT_ADMIN
@@ -29,6 +30,9 @@ enum PermissionType {
   SUPER_ADMIN
   VIEW_COHORT
   EDIT_COHORT
+  EDIT_SECTION
+  VIEW_SECTION
+  CREATE_SECTION
 }
 
 model Permission {
@@ -129,7 +133,7 @@ model Cohort {
   name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id])
-  sections Section[]
+  sections Section[] 
   students Student[]
   course   Course[]
 }
@@ -148,6 +152,7 @@ model Semester {
   id       String   @id @default(cuid())
   code     String   @unique
   name     String
+  year     String
   careerId String
   career   Career   @relation(fields: [careerId], references: [id])
   courses  Course[]

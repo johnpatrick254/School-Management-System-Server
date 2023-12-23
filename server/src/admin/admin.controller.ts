@@ -52,8 +52,8 @@ export class AdminController {
   }
 
   @RequiredPermission('SUPER_ADMIN')
-  @Delete()
-  async delete(@Query('id') id: string) {
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
     return await this.adminService.delete(id);
   }
 }

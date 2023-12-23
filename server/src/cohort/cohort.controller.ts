@@ -20,10 +20,10 @@ import { RequiredPermission } from '../auth/permision.decorator';
 export class CohortController {
   constructor(private service: CohortService) {}
 
-  @RequiredPermission('EDIT_COHORT')
+  @RequiredPermission("EDIT_COHORT")
   @Post()
-  async create(data: CreateCohortDTO): Promise<Cohort> {
-    return this.service.create(data);
+  async create(@Body() data: CreateCohortDTO): Promise<Cohort> {
+      return this.service.create(data);
   }
 
   @RequiredPermission('EDIT_COHORT')
@@ -35,10 +35,10 @@ export class CohortController {
     return this.service.update(id, data);
   }
 
-  @RequiredPermission('VIEW_COHORT')
+  @RequiredPermission("VIEW_COHORT")
   @Get(':id')
   async getCohortById(@Param('id') id: string): Promise<Cohort> {
-    return this.getCohortById(id);
+      return this.service.getCohortById(id);
   }
 
   @RequiredPermission('VIEW_COHORT')
@@ -53,9 +53,9 @@ export class CohortController {
     return this.service.getCohorts(+limit);
   }
 
-  @RequiredPermission('EDIT_COHORT')
+  @RequiredPermission("EDIT_COHORT")
   @Delete(':id')
-  async delete(@Query('id') id: string) {
-    return this.service.delete(id);
+  async delete(@Param('id') id: string){
+      return this.service.delete(id)
   }
 }

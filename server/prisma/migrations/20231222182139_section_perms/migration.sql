@@ -2,7 +2,7 @@
 CREATE TYPE "UserType" AS ENUM ('STUDENT', 'TEACHER', 'ACCOUNTANT', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "PermissionType" AS ENUM ('EDIT_STUDENT', 'VIEW_STUDENT', 'EDIT_ADMIN', 'VIEW_ADMIN', 'EDIT_TEACHER', 'VIEW_TEACHER', 'EDIT_ACCOUNTANT', 'VIEW_ACCOUNTANT', 'SUPER_ADMIN', 'CREATE_STAFF');
+CREATE TYPE "PermissionType" AS ENUM ('CREATE_STAFF', 'EDIT_STUDENT', 'VIEW_STUDENT', 'EDIT_ADMIN', 'VIEW_ADMIN', 'EDIT_TEACHER', 'VIEW_TEACHER', 'EDIT_ACCOUNTANT', 'VIEW_ACCOUNTANT', 'SUPER_ADMIN', 'VIEW_COHORT', 'EDIT_COHORT', 'EDIT_SECTION', 'VIEW_SECTION', 'CREATE_SECTION');
 
 -- CreateEnum
 CREATE TYPE "PaymentPurpose" AS ENUM ('FEES', 'EXTRA_CURRICULAR', 'DAMAGES');
@@ -114,6 +114,7 @@ CREATE TABLE "Semester" (
     "id" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "year" TEXT NOT NULL,
     "careerId" TEXT NOT NULL,
 
     CONSTRAINT "Semester_pkey" PRIMARY KEY ("id")
@@ -347,6 +348,21 @@ CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Course_code_key" ON "Course"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cohort_code_key" ON "Cohort"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Career_code_key" ON "Career"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Semester_code_key" ON "Semester"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Assignment_code_key" ON "Assignment"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Exam_code_key" ON "Exam"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_PermissionToStudent_AB_unique" ON "_PermissionToStudent"("A", "B");
