@@ -19,7 +19,7 @@ export class RegisterService {
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
-  ) {}
+  ) { }
 
   schoolCode = this.config.get('SCHOOL_CODE');
 
