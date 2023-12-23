@@ -16,7 +16,7 @@ import { Cohort } from '@prisma/client';
 
 @Injectable()
 export class CohortService {
-  constructor(readonly prisma: PrismaService) {}
+  constructor(readonly prisma: PrismaService) { }
 
   async create(data: CreateCohortDTO): Promise<Cohort> {
     try {
@@ -62,7 +62,8 @@ export class CohortService {
   }
 
   async delete(id: string) {
-    const deleted = await this.prisma.cohort.delete({ where: { id } });
+    const deleted = await this.prisma.cohort.findUnique({ where: { id } });
     if (!deleted) throw new NotFoundException('cohort not found');
+    await this.prisma.cohort.delete({ where: { id } });
   }
 }
