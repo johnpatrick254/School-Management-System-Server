@@ -1,12 +1,19 @@
+import {
+  IsBase32,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsString,
+  Max,
+} from 'class-validator';
 
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+export type semester = {
+  name: string;
+  year: string;
+}[];
 
- export type semester ={
-  name:string;
-  year:string;
-}[]
-
-export class CreateCareerDTO  {
+export class CreateCareerDTO {
   @IsNotEmpty()
   @IsString()
   code: string;
@@ -17,8 +24,7 @@ export class CreateCareerDTO  {
 
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
+  @Max(999999999)
   cost: number;
-
-  @IsNotEmpty()
-   semesters: semester;
 }
