@@ -7,6 +7,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { AdminModule } from './admin/admin.module';
 import { CohortModule } from './cohort/cohort.module';
 import { CareerModule } from './career/career.module';
+import { SectionModule } from './section/section.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CareerModule } from './career/career.module';
     AdminModule,
     CohortModule,
     CareerModule,
+    SectionModule,
   ],
   providers: [
     {
