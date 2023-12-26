@@ -108,5 +108,11 @@ describe('CourseController', () => {
     });
   });
 
-
+  describe('delete',()=>{
+    it('should be throw status 400 Bad Request exception Id is not provided', async () => {
+      const nullId= null;
+      jest.spyOn(controller, 'delete').mockRejectedValue(null);
+      expect(controller.delete(null)).rejects.toThrow(new HttpException("No Id provided",HttpStatus.BAD_REQUEST));
+    });
+  })
 });
