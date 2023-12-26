@@ -21,7 +21,6 @@ const seed = async () => {
     { type: PermissionType.VIEW_CAREER },
     { type: PermissionType.EDIT_CAREER },
     { type: PermissionType.UPDATE_CAREER },
-    { type: PermissionType.CREATE_STAFF},
     { type: PermissionType.CREATE_SECTION},
     { type: PermissionType.VIEW_SECTION},
     { type: PermissionType.EDIT_SECTION},
@@ -105,7 +104,6 @@ const seed = async () => {
   const cohort = await prisma.cohort.create({
     data: {
       code: 'JS',
-      name: 'JS Fundamentals',
       careerId: career.id,
     },
   });
