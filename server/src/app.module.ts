@@ -9,6 +9,7 @@ import { CohortModule } from './cohort/cohort.module';
 import { CareerModule } from './career/career.module';
 import { SectionModule } from './section/section.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CourseModule } from './course/course.module';
 
 
 
@@ -23,6 +24,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CareerModule,
     SectionModule,
     ScheduleModule.forRoot(),
+    CourseModule,
   ],
   providers: [
     {
