@@ -19,18 +19,22 @@ export class CohortService {
     name: "create_cohorts_annually"
   })
   async createCohortAutomatically() {
-    const cohorts = await this.prisma.cohort.findMany()
+    const careers = await this.prisma.career.findMany({
+      select: {
+        id: true,
+        code: true
+      }
+    })
     const year = new Date().getFullYear();
-    if (cohorts.length) {
-      cohorts.map(async (cohort, i) => {
+    if (careers.length) {
+      careers.map(async career => {
         const newCohort = await this.prisma.cohort.create({
           data: {
-            name: cohort.name,
-            code: cohort.code,
+            code: `${career.code}-${year}`,
             year: year,
             career: {
               connect: {
-                id: cohort.careerId
+                id: career.id
               }
             }
           }
