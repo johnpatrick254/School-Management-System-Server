@@ -35,7 +35,7 @@ export class CohortService {
             }
           }
         });
-        logger.verbose("NEW COHORT:", newCohort)
+        logger.verbose("[create_cohorts_annually]:NEW ANNUAL COHORT:", newCohort)
       })
     }
   }
