@@ -30,7 +30,6 @@ enum PermissionType {
   SUPER_ADMIN
   VIEW_COHORT
   EDIT_COHORT
-  CREATE_STAFF
   CREATE_CAREER
   VIEW_CAREER
   EDIT_CAREER
@@ -135,7 +134,6 @@ model Cohort {
   code     String    @unique
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
-  name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id])
   sections Section[]

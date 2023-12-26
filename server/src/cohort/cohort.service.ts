@@ -1,23 +1,48 @@
 import {
-  Body,
   ConflictException,
-  Get,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  Param,
-  Post,
-  Put,
 } from '@nestjs/common';
 import { PrismaService } from '../database/database.service';
 import { CreateCohortDTO } from './DTO/createcohort.dto';
 import { UpdateCohortDTO } from './DTO/updatecohort.dto';
 import { Cohort } from '@prisma/client';
 import { logger } from 'src/lib/logger';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CohortService {
   constructor(readonly prisma: PrismaService) { }
+
+  @Cron(CronExpression.EVERY_YEAR, {
+    name: "create_cohorts_annually"
+  })
+  async createCohortAutomatically() {
+    const careers = await this.prisma.career.findMany({
+      select: {
+        id: true,
+        code: true
+      }
+    })
+    const year = new Date().getFullYear();
+    if (careers.length) {
+      careers.map(async career => {
+        const newCohort = await this.prisma.cohort.create({
+          data: {
+            code: `${career.code}-${year}`,
+            year: year,
+            career: {
+              connect: {
+                id: career.id
+              }
+            }
+          }
+        });
+        logger.verbose("[create_cohorts_annually]:NEW ANNUAL COHORT:", newCohort)
+      })
+    }
+  }
 
   async create(data: CreateCohortDTO): Promise<Cohort> {
     try {
