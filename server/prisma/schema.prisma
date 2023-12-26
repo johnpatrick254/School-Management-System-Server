@@ -115,11 +115,11 @@ model Admin {
 model Course {
   code        String         @unique
   id          String         @id @default(cuid())
-  contentUrl  String
+  contentUrl  String         
   name        String
+  teacherId   String
   teacher     Teacher        @relation(fields: [teacherId], references: [id],onUpdate: Cascade)
   semester    Semester []      
-  teacherId   String
   sections    Section[]
   assignment  Assignment[]
   exams       Exam[]
