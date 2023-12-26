@@ -131,7 +131,7 @@ model Course {
 }
 
 model Cohort {
-  code     String    @unique
+  code     String    
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   name     String
