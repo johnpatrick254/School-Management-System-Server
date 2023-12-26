@@ -8,6 +8,9 @@ import { AdminModule } from './admin/admin.module';
 import { CohortModule } from './cohort/cohort.module';
 import { CareerModule } from './career/career.module';
 import { SectionModule } from './section/section.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
+
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import { SectionModule } from './section/section.module';
     CohortModule,
     CareerModule,
     SectionModule,
+    ScheduleModule.forRoot(),
   ],
   providers: [
     {
@@ -27,4 +31,4 @@ import { SectionModule } from './section/section.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
