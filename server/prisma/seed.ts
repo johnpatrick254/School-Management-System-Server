@@ -21,10 +21,9 @@ const seed = async () => {
     { type: PermissionType.VIEW_CAREER },
     { type: PermissionType.EDIT_CAREER },
     { type: PermissionType.UPDATE_CAREER },
-    { type: PermissionType.CREATE_STAFF},
-    { type: PermissionType.CREATE_SECTION},
-    { type: PermissionType.VIEW_SECTION},
-    { type: PermissionType.EDIT_SECTION},
+    { type: PermissionType.CREATE_SECTION },
+    { type: PermissionType.VIEW_SECTION },
+    { type: PermissionType.EDIT_SECTION },
   ];
 
   const createdPermission = await prisma.permission.createMany({
@@ -39,7 +38,14 @@ const seed = async () => {
   const teacherPermission = await prisma.permission.findMany({
     where: {
       type: {
-        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION"],
+        in: [
+          'VIEW_STUDENT',
+          'EDIT_STUDENT',
+          'VIEW_TEACHER',
+          'EDIT_TEACHER',
+          'EDIT_SECTION',
+          'VIEW_SECTION',
+        ],
       },
     },
   });
