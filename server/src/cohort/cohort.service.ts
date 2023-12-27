@@ -13,13 +13,13 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CohortService {
-  constructor(readonly prisma: PrismaService) { }
+  constructor(readonly prisma: PrismaService) {}
 
-  @Cron(CronExpression.EVERY_YEAR, {
-    name: "create_cohorts_annually"
+  @Cron('0 0 1 1 *', {
+    name: 'create_cohorts_annually',
   })
   async createCohortAutomatically() {
-    const cohorts = await this.prisma.cohort.findMany()
+    const cohorts = await this.prisma.cohort.findMany();
     const year = new Date().getFullYear();
     if (cohorts.length) {
       cohorts.map(async (cohort, i) => {
@@ -30,13 +30,16 @@ export class CohortService {
             year: year,
             career: {
               connect: {
-                id: cohort.careerId
-              }
-            }
-          }
+                id: cohort.careerId,
+              },
+            },
+          },
         });
-        logger.verbose("[create_cohorts_annually]:NEW ANNUAL COHORT:", newCohort)
-      })
+        logger.verbose(
+          '[create_cohorts_annually]:NEW ANNUAL COHORT:',
+          newCohort,
+        );
+      });
     }
   }
 
@@ -47,7 +50,7 @@ export class CohortService {
       });
       return cohort;
     } catch (error) {
-      logger.error(error)
+      logger.error(error);
       if (error.code === 'P2002')
         throw new ConflictException('cohort already exist');
       throw new InternalServerErrorException();
