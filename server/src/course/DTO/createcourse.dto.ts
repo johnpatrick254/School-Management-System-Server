@@ -8,8 +8,4 @@ export class CreateCourseDTO {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  teacherId: string;
 }
