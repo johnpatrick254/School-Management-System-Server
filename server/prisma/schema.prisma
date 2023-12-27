@@ -41,6 +41,9 @@ enum PermissionType {
   UPDATE_COURSE
   VIEW_COURSE
   DELETE_COURSE
+  CREATE_SEMESTER
+  UPDATE_SEMESTER
+  VIEW_SEMESTER
 }
 
 model Permission {
@@ -154,13 +157,12 @@ model Career {
 }
 
 model Semester {
-  id       String   @id @default(cuid())
-  code     String   @unique
-  name     String
-  year     String
-  careerId String
-  career   Career   @relation(fields: [careerId], references: [id], onUpdate: Cascade)
-  courses  Course[]
+
+  id           String   @id @default(cuid())
+  academicYear String
+  careerId     String
+  career       Career   @relation(fields: [careerId], references: [id])
+  courses      Course[]
 }
 
 model Section {

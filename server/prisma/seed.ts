@@ -28,6 +28,11 @@ const seed = async () => {
     { type: PermissionType.UPDATE_COURSE },
     { type: PermissionType.VIEW_COURSE },
     { type: PermissionType.DELETE_COURSE },
+    { type: PermissionType.CREATE_SECTION},
+    { type: PermissionType.VIEW_SECTION},
+    { type: PermissionType.CREATE_SEMESTER},
+    { type: PermissionType.UPDATE_SEMESTER},
+    { type: PermissionType.VIEW_SEMESTER},
   ];
 
   const createdPermission = await prisma.permission.createMany({
@@ -42,15 +47,7 @@ const seed = async () => {
   const teacherPermission = await prisma.permission.findMany({
     where: {
       type: {
-        in: [
-          'VIEW_STUDENT',
-          'EDIT_STUDENT',
-          'VIEW_TEACHER',
-          'EDIT_TEACHER',
-          'EDIT_SECTION',
-          'VIEW_SECTION',
-          'VIEW_COURSE',
-        ],
+        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'VIEW_COHORT','EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION","VIEW_SEMESTER",'VIEW_COURSE','EDIT_COURSE',],
       },
     },
   });
@@ -58,7 +55,7 @@ const seed = async () => {
     where: { type: { in: ['VIEW_ACCOUNTANT', 'EDIT_ACCOUNTANT'] } },
   });
   const studentPermission = await prisma.permission.findMany({
-    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_COURSE'] } },
+    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT','VIEW_CAREER','VIEW_COHORT','VIEW_SECTION','VIEW_SEMESTER'] } },
   });
 
   // Super Admin
