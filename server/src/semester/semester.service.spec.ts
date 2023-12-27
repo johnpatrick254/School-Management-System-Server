@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SemesterService } from './semester.service';
-import { PrismaService } from 'src/database/database.service';
+import { PrismaService } from '../database/database.service';
 import { Semester } from '@prisma/client';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { CreateSemesterDTO } from './DTO/createsemester.dto';
@@ -11,10 +11,8 @@ describe('SemesterService', () => {
   let prisma: PrismaService;
   const mockSemester: Semester = {
     id: '123',
-    code: 'semester-code',
     careerId: '321',
-    name: 'semester-test',
-    year: '2020',
+    academicYear: '2020',
   };
 
   beforeEach(async () => {
@@ -77,13 +75,13 @@ describe('SemesterService', () => {
     const updateSemesterDTO = new UpdateSemesterDTO();
     const id = '1';
     it('should be called with UpdateSemesterDTO', async () => {
-      jest.spyOn(service, 'update');
+      jest.spyOn(service, 'update').mockResolvedValue(mockSemester);
       await service.update(id, updateSemesterDTO);
       expect(service.update).toBeCalledWith(id, updateSemesterDTO);
     });
 
     it('should throw NotFoundException() when there is no semester', async () => {
-      jest.spyOn(prisma.semester, 'update').mockResolvedValue(null);
+      jest.spyOn(prisma.semester, 'update').mockRejectedValue({code:'P2025'});
       await expect(service.update(id, updateSemesterDTO)).rejects.toThrow(
         new NotFoundException('semester not found'),
       );
@@ -128,7 +126,7 @@ describe('SemesterService', () => {
           mockSemester,
           mockSemester,
         ]);
-      const semester = await service.getSemester(limit);
+      const semester = await service.getSemesters(limit);
       expect(semester.length).toEqual(limit);
     });
   });

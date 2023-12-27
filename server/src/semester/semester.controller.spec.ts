@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SemesterController } from './semester.controller';
 import { Semester } from '@prisma/client';
 import { SemesterService } from './semester.service';
-import { PrismaService } from 'src/database/database.service';
+import { PrismaService } from '../database/database.service';
 import { CreateSemesterDTO } from './DTO/createsemester.dto';
 import { UpdateSemesterDTO } from './DTO/updatesemester.dto';
 
@@ -10,10 +10,8 @@ describe('SemesterController', () => {
   let controller: SemesterController;
   const mockSemester: Semester = {
     id: '123',
-    code: 'semester-code',
     careerId: '321',
-    name: 'semester-test',
-    year: '2020',
+    academicYear: '2020',
   };
 
   beforeEach(async () => {
