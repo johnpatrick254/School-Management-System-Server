@@ -37,6 +37,10 @@ enum PermissionType {
   EDIT_SECTION
   VIEW_SECTION
   CREATE_SECTION
+  CREATE_COURSE
+  UPDATE_COURSE
+  VIEW_COURSE
+  DELETE_COURSE
   CREATE_SEMESTER
   UPDATE_SEMESTER
   VIEW_SEMESTER
@@ -63,7 +67,7 @@ model Student {
   cohortId          String
   cohort            Cohort             @relation(fields: [cohortId], references: [id], onUpdate: Cascade)
   sectionId         String
-  section           Section            @relation(fields: [sectionId], references: [id])
+  section           Section            @relation(fields: [sectionId], references: [id], onUpdate: Cascade)
   courses           Course[]
   transaction       Transactions[]
   userAnswer        UserAnswer[]
@@ -116,21 +120,19 @@ model Admin {
 }
 
 model Course {
-  code        String         @unique
-  id          String         @id @default(cuid())
-  contentUrl  String
-  name        String
-  semesterId  String
-  semester    Semester       @relation(fields: [semesterId], references: [id])
-  teacherId   String
-  teacher     Teacher        @relation(fields: [teacherId], references: [id])
-  sections    Section[]
-  assignment  Assignment[]
-  exams       Exam[]
-  cohort      Cohort[]
-  courseResut CourseResult[]
-  students    Student[]
-  schedules   Schedule[]
+  code          String         @unique
+  id            String         @id @default(cuid())
+  contentUrl    String?
+  name          String
+  teachers      Teacher[]
+  semesters     Semester[]
+  sections      Section[]
+  assignments   Assignment[]
+  exams         Exam[]
+  cohorts       Cohort[]
+  courseResults CourseResult[]
+  students      Student[]
+  schedules     Schedule[]
 }
 
 model Cohort {
@@ -138,7 +140,7 @@ model Cohort {
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   careerId String
-  career   Career    @relation(fields: [careerId], references: [id])
+  career   Career    @relation(fields: [careerId], references: [id], onUpdate: Cascade)
   sections Section[]
   students Student[]
   course   Course[]
@@ -155,6 +157,7 @@ model Career {
 }
 
 model Semester {
+
   id           String   @id @default(cuid())
   academicYear String
   careerId     String
@@ -166,9 +169,9 @@ model Section {
   id        String     @id @default(cuid())
   name      String
   cohortId  String
-  cohort    Cohort     @relation(fields: [cohortId], references: [id])
+  cohort    Cohort     @relation(fields: [cohortId], references: [id], onUpdate: Cascade)
   teacherId String
-  teacher   Teacher    @relation(fields: [teacherId], references: [id])
+  teacher   Teacher    @relation(fields: [teacherId], references: [id], onUpdate: Cascade)
   schedules Schedule[]
   courses   Course[]
   students  Student[]
@@ -188,9 +191,9 @@ model Transactions {
   notes        String?
   createdAt    DateTime       @default(now())
   student_code String
-  student      Student        @relation(fields: [student_code], references: [code])
+  student      Student        @relation(fields: [student_code], references: [code], onUpdate: Cascade)
   accountantId String
-  accountant   Accountant     @relation(fields: [accountantId], references: [id])
+  accountant   Accountant     @relation(fields: [accountantId], references: [id], onUpdate: Cascade)
   fee          Fee[]
 }
 
@@ -200,9 +203,9 @@ model Assignment {
   name              String
   autoMark          Boolean
   teacherId         String
-  teacher           Teacher            @relation(fields: [teacherId], references: [id])
+  teacher           Teacher            @relation(fields: [teacherId], references: [id], onUpdate: Cascade)
   courseId          String
-  course            Course             @relation(fields: [courseId], references: [id])
+  course            Course             @relation(fields: [courseId], references: [id], onUpdate: Cascade)
   questions         Question[]
   assignmentResults AssignmentResult[]
 }
@@ -213,9 +216,9 @@ model Exam {
   totalMarks Int
   autoMark   Boolean
   teacherId  String
-  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacher    Teacher      @relation(fields: [teacherId], references: [id], onUpdate: Cascade)
   courseId   String
-  course     Course       @relation(fields: [courseId], references: [id])
+  course     Course       @relation(fields: [courseId], references: [id], onUpdate: Cascade)
   examResult ExamResult[]
   questions  Question[]
 }
@@ -225,7 +228,7 @@ model Schedule {
   startTime DateTime
   endTime   DateTime
   courseId  String
-  course    Course    @relation(fields: [courseId], references: [id])
+  course    Course    @relation(fields: [courseId], references: [id], onUpdate: Cascade)
   section   Section[]
 }
 
@@ -240,9 +243,9 @@ model Question {
   type           QuestionType
   content        String
   examId         String?
-  exam           Exam?            @relation(fields: [examId], references: [id])
+  exam           Exam?            @relation(fields: [examId], references: [id], onUpdate: Cascade)
   assignmentId   String?
-  assignment     Assignment?      @relation(fields: [assignmentId], references: [id])
+  assignment     Assignment?      @relation(fields: [assignmentId], references: [id], onUpdate: Cascade)
   questionOption QuestionOption[]
   userAnswer     UserAnswer[]
 }
@@ -252,16 +255,16 @@ model QuestionOption {
   answer     String
   isCorrect  Boolean
   questionId String
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onUpdate: Cascade)
 }
 
 model UserAnswer {
   id                String             @id @default(cuid())
   answer            String
   questionId        String
-  question          Question           @relation(fields: [questionId], references: [id])
+  question          Question           @relation(fields: [questionId], references: [id], onUpdate: Cascade)
   studentId         String
-  student           Student            @relation(fields: [studentId], references: [id])
+  student           Student            @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   examResults       ExamResult[]
   assignmentResults AssignmentResult[]
 }
@@ -270,21 +273,21 @@ model ExamResult {
   id             String       @id @default(cuid())
   score          String
   examId         String
-  exam           Exam         @relation(fields: [examId], references: [id])
+  exam           Exam         @relation(fields: [examId], references: [id], onUpdate: Cascade)
   studentId      String
-  student        Student      @relation(fields: [studentId], references: [id])
+  student        Student      @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   userAnswer     UserAnswer[]
   courseResultId String
-  courseResult   CourseResult @relation(fields: [courseResultId], references: [id])
+  courseResult   CourseResult @relation(fields: [courseResultId], references: [id], onUpdate: Cascade)
 }
 
 model AssignmentResult {
   id           String       @id @default(cuid())
   score        String
   assignmentId String
-  assignment   Assignment   @relation(fields: [assignmentId], references: [id])
+  assignment   Assignment   @relation(fields: [assignmentId], references: [id], onUpdate: Cascade)
   studentId    String
-  student      Student      @relation(fields: [studentId], references: [id])
+  student      Student      @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   userAnswer   UserAnswer[]
 }
 
@@ -292,9 +295,9 @@ model CourseResult {
   id          String       @id @default(cuid())
   score       String
   studentId   String
-  student     Student      @relation(fields: [studentId], references: [id])
+  student     Student      @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   courseId    String
-  course      Course       @relation(fields: [courseId], references: [id])
+  course      Course       @relation(fields: [courseId], references: [id], onUpdate: Cascade)
   examResults ExamResult[]
 }
 
@@ -304,8 +307,8 @@ model Fee {
   balance     Int
   paid        Int
   careerId    String
-  Career      Career         @relation(fields: [careerId], references: [id])
+  Career      Career         @relation(fields: [careerId], references: [id], onUpdate: Cascade)
   studentId   String
-  student     Student        @relation(fields: [studentId], references: [id])
+  student     Student        @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   transaction Transactions[]
 }
