@@ -40,7 +40,7 @@ const seed = async () => {
   const teacherPermission = await prisma.permission.findMany({
     where: {
       type: {
-        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION","VIEW_SEMESTER"],
+        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'VIEW_COHORT','EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION","VIEW_SEMESTER"],
       },
     },
   });
@@ -48,7 +48,7 @@ const seed = async () => {
     where: { type: { in: ['VIEW_ACCOUNTANT', 'EDIT_ACCOUNTANT'] } },
   });
   const studentPermission = await prisma.permission.findMany({
-    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT'] } },
+    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT','VIEW_CAREER','VIEW_COHORT','VIEW_SECTION','VIEW_SEMESTER'] } },
   });
 
   // Super Admin
