@@ -37,6 +37,9 @@ enum PermissionType {
   EDIT_SECTION
   VIEW_SECTION
   CREATE_SECTION
+  CREATE_SEMESTER
+  UPDATE_SEMESTER
+  VIEW_SEMESTER
 }
 
 model Permission {
@@ -153,7 +156,6 @@ model Career {
 
 model Semester {
   id           String   @id @default(cuid())
-  name         String
   academicYear String
   careerId     String
   career       Career   @relation(fields: [careerId], references: [id])
