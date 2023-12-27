@@ -113,24 +113,23 @@ model Admin {
 }
 
 model Course {
-  code        String         @unique
-  id          String         @id @default(cuid())
-  contentUrl  String         
-  name        String
-  teacherId   String
-  teacher     Teacher        @relation(fields: [teacherId], references: [id],onUpdate: Cascade)
-  semester    Semester []      
-  sections    Section[]
-  assignment  Assignment[]
-  exams       Exam[]
-  cohort      Cohort[]
-  courseResut CourseResult[]
-  students    Student[]
-  schedules   Schedule[]
+  code          String         @unique
+  id            String         @id @default(cuid())
+  contentUrl    String?
+  name          String
+  teachers      Teacher[]
+  semesters     Semester[]
+  sections      Section[]
+  assignments   Assignment[]
+  exams         Exam[]
+  cohorts       Cohort[]
+  courseResults CourseResult[]
+  students      Student[]
+  schedules     Schedule[]
 }
 
 model Cohort {
-  code     String    
+  code     String
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   name     String
