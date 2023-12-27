@@ -152,13 +152,12 @@ model Career {
 }
 
 model Semester {
-  id       String   @id @default(cuid())
-  code     String   @unique
-  name     String
-  year     String
-  careerId String
-  career   Career   @relation(fields: [careerId], references: [id])
-  courses  Course[]
+  id           String   @id @default(cuid())
+  name         String
+  academicYear String
+  careerId     String
+  career       Career   @relation(fields: [careerId], references: [id])
+  courses      Course[]
 }
 
 model Section {
