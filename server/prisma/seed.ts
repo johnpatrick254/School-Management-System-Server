@@ -116,7 +116,6 @@ const seed = async () => {
   const cohort = await prisma.cohort.create({
     data: {
       code: 'JS',
-      name: 'JS Fundamentals',
       careerId: career.id,
     },
   });

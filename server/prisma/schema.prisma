@@ -133,10 +133,9 @@ model Course {
 }
 
 model Cohort {
-  code     String
+  code     String    @unique
   id       String    @id @default(cuid())
   year     Int       @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
-  name     String
   careerId String
   career   Career    @relation(fields: [careerId], references: [id], onUpdate: Cascade)
   sections Section[]
