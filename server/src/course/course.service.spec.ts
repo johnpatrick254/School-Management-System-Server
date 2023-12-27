@@ -6,7 +6,6 @@ import { CreateCourseDTO } from './DTO/createcourse.dto';
 import { UpdateCourseDTO } from './DTO/updatecourse.dto';
 import { CourseService } from './course.service';
 
-
 describe('CourseService', () => {
   let service: CourseService;
   let prisma: PrismaService;
@@ -14,8 +13,7 @@ describe('CourseService', () => {
     id: 'j1s2',
     code: 'JS',
     name: 'javascript',
-    teacherId: 'careerid',
-    contentUrl:'mockurl'
+    contentUrl: 'mockurl',
   };
 
   beforeEach(async () => {
@@ -73,25 +71,25 @@ describe('CourseService', () => {
   });
 
   describe('update course', () => {
-    const id  = 'someid';
-    const updateData  = new UpdateCourseDTO();
+    const id = 'someid';
+    const updateData = new UpdateCourseDTO();
     it('should be called with UpdateCourseDTO', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockCourse);
-      await service.update({id,...updateData});
-      expect(service.update).toBeCalledWith({id,...updateData});
+      await service.update(id, updateData);
+      expect(service.update).toBeCalledWith(id, updateData);
     });
 
     it('should throw NotFoundException() when there is no course', async () => {
       jest.spyOn(prisma.course, 'update').mockResolvedValue(null);
-      await expect(service.update({id,...updateData})).rejects.toThrow(
+      await expect(service.update(id, updateData)).rejects.toThrow(
         new NotFoundException('course not found'),
       );
     });
 
     it('should return updated course type', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockCourse);
-      expect(await service.update({id,...updateData})).toEqual(mockCourse);
-     });
+      expect(await service.update(id, updateData)).toEqual(mockCourse);
+    });
   });
 
   describe('get course by Id', () => {
@@ -126,7 +124,7 @@ describe('CourseService', () => {
           mockCourse,
           mockCourse,
         ]);
-      const courses = await service.getCourses(limit)
+      const courses = await service.getCourses(limit);
       expect(courses.length).toEqual(limit);
     });
   });

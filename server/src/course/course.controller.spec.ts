@@ -13,8 +13,7 @@ describe('CourseController', () => {
     id: 'j1s2',
     code: 'JS',
     name: 'javascript',
-    teacherId: 'careerid',
-    contentUrl:'mockurl'
+    contentUrl: 'mockurl',
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -57,17 +56,19 @@ describe('CourseController', () => {
   });
 
   describe('update', () => {
-    const id  = 'someid';
-    const updateData  = new UpdateCourseDTO();
+    const id = 'someid';
+    const updateData = new UpdateCourseDTO();
     it('should be called with UpdateCourseDTO', async () => {
       jest.spyOn(controller, 'update').mockResolvedValue(mockCourse);
-      await controller.update(id,updateData);
+      await controller.update(id, updateData);
       expect(controller.update).toBeCalledWith(id, updateData);
     });
-    it('should be throw status 400 Bad Request exception id is not provided', async () => {
-      const nullId= null;
-      jest.spyOn(controller, 'update').mockRejectedValue(null);
-      expect(controller.update(null,updateData)).rejects.toThrow(new HttpException("No id provided",HttpStatus.BAD_REQUEST));
+    it('should be throw status 400 Bad Request exception if id is not provided', async () => {
+      const nullId = null;
+      jest.spyOn(controller, 'update');
+      await expect(controller.update(nullId, updateData)).rejects.toThrow(
+        new HttpException('No id provided', HttpStatus.BAD_REQUEST),
+      );
     });
 
     it('should return course type', async () => {
@@ -84,21 +85,23 @@ describe('CourseController', () => {
   });
 
   describe('get courses', () => {
-    const limit = 1;
+    const limit = '1';
     it('should return course type', async () => {
       jest.spyOn(controller, 'getCourses').mockResolvedValue([mockCourse]);
       expect(await controller.getCourses(limit)).toEqual([mockCourse]);
     });
     it('should be throw status 400 Bad Request exception limit is not provided', async () => {
-      const nullLimit= null;
-      jest.spyOn(controller, 'getCourses').mockRejectedValue(null);
-      expect(controller.update(null,updateData)).rejects.toThrow(new HttpException("No limit provided",HttpStatus.BAD_REQUEST));
+      const nullLimit = null;
+      jest.spyOn(controller, 'getCourses');
+      await expect(controller.getCourses(nullLimit)).rejects.toThrow(
+        new HttpException('No limit provided', HttpStatus.BAD_REQUEST),
+      );
     });
 
     it('should limit the result to the limit amount', async () => {
       jest.spyOn(controller, 'getCourses').mockResolvedValue([mockCourse]);
       const course = await controller.getCourses(limit);
-      expect(course.length).toEqual(limit);
+      expect(course.length).toEqual(+limit);
     });
 
     it('should return an empty array when there is no course', async () => {
@@ -108,11 +111,13 @@ describe('CourseController', () => {
     });
   });
 
-  describe('delete',()=>{
+  describe('delete', () => {
     it('should be throw status 400 Bad Request exception Id is not provided', async () => {
-      const nullId= null;
-      jest.spyOn(controller, 'delete').mockRejectedValue(null);
-      expect(controller.delete(null)).rejects.toThrow(new HttpException("No Id provided",HttpStatus.BAD_REQUEST));
+      const nullId = null;
+      jest.spyOn(controller, 'delete');
+      await expect(controller.delete(null)).rejects.toThrow(
+        new HttpException('No id provided', HttpStatus.BAD_REQUEST),
+      );
     });
-  })
+  });
 });
