@@ -43,14 +43,14 @@ export class CohortController {
 
   @RequiredPermission('VIEW_COHORT')
   @Get()
-  async getCohorts(@Query('limit') limit: string) {
-    if (limit === '' || !limit) {
+  async getCohorts(@Query('limit') limit: number) {
+    if (!limit) {
       throw new HttpException(
         'No limit provided',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    return this.service.getCohorts(+limit);
+    return this.service.getCohorts(limit);
   }
 
   @RequiredPermission('DELETE_COHORT')
