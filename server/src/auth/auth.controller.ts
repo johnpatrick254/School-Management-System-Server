@@ -54,7 +54,7 @@ export class AuthController {
     const token = Jwt.sign(currentStaff, secret, {
       expiresIn: '24h',
     });
-    res.cookie("session", token, { httpOnly: true, secure: true,expires: new Date(Date.now() + (60 * 60 * 60 * 4 * 1000)) }).status(200).send({ user: token });
+    res.cookie("session", token, { httpOnly: true, expires: new Date(Date.now() + (60 * 60 * 60 * 4 * 1000)) }).status(200).send({ user: token });
   }
 
   @Get('logout')
