@@ -36,13 +36,13 @@ export class AdminController {
     return await this.adminService.getAdmins(+limit);
   }
 
-  @RequiredPermission('EDIT_ADMIN')
+  @RequiredPermission('DELETE_ADMIN')
   @Put()
   async updatePassword(data: UpdatePasswordDTO): Promise<void> {
     return await this.adminService.updatePassword(data);
   }
 
-  @RequiredPermission('EDIT_ADMIN')
+  @RequiredPermission('DELETE_ADMIN')
   @Put(':id')
   async update(
     @Param('id') id: string,

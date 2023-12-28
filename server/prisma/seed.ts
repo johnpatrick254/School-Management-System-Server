@@ -1,42 +1,41 @@
-import { Permission, PermissionType, PrismaClient } from '@prisma/client';
+import { PermissionType, PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
 // Permissions
 const seed = async () => {
   const permissions = [
-    { type: PermissionType.EDIT_STUDENT },
+    { type: PermissionType.DELETE_STUDENT },
     { type: PermissionType.VIEW_STUDENT },
-    { type: PermissionType.EDIT_TEACHER },
+    { type: PermissionType.DELETE_TEACHER },
     { type: PermissionType.VIEW_TEACHER },
     { type: PermissionType.VIEW_ADMIN },
-    { type: PermissionType.EDIT_ADMIN },
+    { type: PermissionType.DELETE_ADMIN },
     { type: PermissionType.VIEW_ACCOUNTANT },
-    { type: PermissionType.EDIT_ACCOUNTANT },
-    { type: PermissionType.EDIT_COHORT },
+    { type: PermissionType.DELETE_ACCOUNTANT },
+    { type: PermissionType.DELETE_COHORT },
     { type: PermissionType.VIEW_COHORT },
     { type: PermissionType.SUPER_ADMIN },
     { type: PermissionType.CREATE_STAFF },
     { type: PermissionType.CREATE_CAREER },
     { type: PermissionType.VIEW_CAREER },
-    { type: PermissionType.EDIT_CAREER },
+    { type: PermissionType.DELETE_CAREER },
     { type: PermissionType.UPDATE_CAREER },
     { type: PermissionType.CREATE_SECTION },
     { type: PermissionType.VIEW_SECTION },
-    { type: PermissionType.EDIT_SECTION },
+    { type: PermissionType.DELETE_SECTION },
     { type: PermissionType.CREATE_COURSE },
     { type: PermissionType.UPDATE_COURSE },
     { type: PermissionType.VIEW_COURSE },
     { type: PermissionType.DELETE_COURSE },
-    { type: PermissionType.CREATE_SECTION},
-    { type: PermissionType.VIEW_SECTION},
-    { type: PermissionType.CREATE_SEMESTER},
-    { type: PermissionType.UPDATE_SEMESTER},
-    { type: PermissionType.VIEW_SEMESTER},
+    { type: PermissionType.CREATE_SEMESTER },
+    { type: PermissionType.UPDATE_SEMESTER },
+    { type: PermissionType.VIEW_SEMESTER },
   ];
 
   const createdPermission = await prisma.permission.createMany({
     data: permissions,
+    skipDuplicates: true,
   });
   console.log(createdPermission);
 
@@ -47,15 +46,33 @@ const seed = async () => {
   const teacherPermission = await prisma.permission.findMany({
     where: {
       type: {
-        in: ['VIEW_STUDENT', 'EDIT_STUDENT', 'VIEW_TEACHER', 'VIEW_COHORT','EDIT_TEACHER','EDIT_SECTION',"VIEW_SECTION","VIEW_SEMESTER",'VIEW_COURSE','EDIT_COURSE',],
+        in: [
+          'VIEW_STUDENT',
+          'VIEW_TEACHER',
+          'VIEW_COHORT',
+          'VIEW_SECTION',
+          'VIEW_SEMESTER',
+          'VIEW_COURSE',
+        ],
       },
     },
   });
   const accountantPermission = await prisma.permission.findMany({
-    where: { type: { in: ['VIEW_ACCOUNTANT', 'EDIT_ACCOUNTANT'] } },
+    where: { type: { in: ['VIEW_ACCOUNTANT'] } },
   });
   const studentPermission = await prisma.permission.findMany({
-    where: { type: { in: ['VIEW_STUDENT', 'EDIT_STUDENT','VIEW_CAREER','VIEW_COHORT','VIEW_SECTION','VIEW_SEMESTER'] } },
+    where: {
+      type: {
+        in: [
+          'VIEW_STUDENT',
+          'VIEW_CAREER',
+          'VIEW_COHORT',
+          'VIEW_SECTION',
+          'VIEW_SEMESTER',
+          'VIEW_COURSE',
+        ],
+      },
+    },
   });
 
   // Super Admin

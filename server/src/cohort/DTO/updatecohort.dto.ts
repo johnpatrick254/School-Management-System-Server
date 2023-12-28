@@ -7,14 +7,9 @@ export class UpdateCohortDTO {
 
   @IsOptional()
   @IsString()
-  name: string;
-
-  @IsOptional()
-  @IsString()
   careerId: string;
-  
+
   @IsNotEmpty()
   @IsString()
   id: string;
-
 }

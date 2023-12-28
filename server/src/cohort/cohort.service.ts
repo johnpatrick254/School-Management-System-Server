@@ -8,7 +8,7 @@ import { PrismaService } from '../database/database.service';
 import { CreateCohortDTO } from './DTO/createcohort.dto';
 import { UpdateCohortDTO } from './DTO/updatecohort.dto';
 import { Cohort } from '@prisma/client';
-import { logger } from 'src/lib/logger';
+import { logger } from '../lib/logger';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
@@ -22,22 +22,22 @@ export class CohortService {
     const careers = await this.prisma.career.findMany({
       select: {
         id: true,
-        code: true
-      }
-    })
+        code: true,
+      },
+    });
     const year = new Date().getFullYear();
     if (careers.length) {
-      careers.map(async career => {
+      careers.map(async (career) => {
         const newCohort = await this.prisma.cohort.create({
           data: {
             code: `${career.code}-${year}`,
             year: year,
             career: {
               connect: {
-                id: career.id
-              }
-            }
-          }
+                id: career.id,
+              },
+            },
+          },
         });
         logger.verbose(
           '[create_cohorts_annually]:NEW ANNUAL COHORT:',
@@ -61,10 +61,7 @@ export class CohortService {
     }
   }
 
-  async update(
-    id: string,
-    data: Pick<UpdateCohortDTO, 'careerId' | 'code' | 'name'>,
-  ) {
+  async update(id: string, data: Pick<UpdateCohortDTO, 'careerId' | 'code'>) {
     const updatedCohort = await this.prisma.cohort.update({
       data,
       where: { id },

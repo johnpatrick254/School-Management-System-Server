@@ -7,9 +7,5 @@ export class CreateCohortDTO {
 
   @IsNotEmpty()
   @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsString()
   careerId: string;
 }
