@@ -48,7 +48,6 @@ const seed = async () => {
       type: {
         in: [
           'VIEW_STUDENT',
-          'DELETE_STUDENT',
           'VIEW_TEACHER',
           'VIEW_COHORT',
           'VIEW_SECTION',
