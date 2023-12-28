@@ -8,7 +8,7 @@ import { PrismaService } from '../database/database.service';
 import { CreateCohortDTO } from './DTO/createcohort.dto';
 import { UpdateCohortDTO } from './DTO/updatecohort.dto';
 import { Cohort } from '@prisma/client';
-import { logger } from 'src/lib/logger';
+import { logger } from '../lib/logger';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()

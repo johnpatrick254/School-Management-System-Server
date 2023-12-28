@@ -14,7 +14,7 @@ import { CourseService } from './course.service';
 import { CreateCourseDTO } from './DTO/createcourse.dto';
 import { Course } from '@prisma/client';
 import { UpdateCourseDTO } from './DTO/updatecourse.dto';
-import { RequiredPermission } from 'src/auth/permision.decorator';
+import { RequiredPermission } from '../auth/permision.decorator';
 
 @Controller('course')
 export class CourseController {
