@@ -13,7 +13,7 @@ import { UpdatePasswordDTO } from '../core/DTO/update-password.dto';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async getAdminById(id: string) {
     const admin = await this.prisma.admin.findUnique({
@@ -93,6 +93,6 @@ export class AdminService {
   async delete(id: string) {
     const admin = await this.prisma.admin.findUnique({ where: { id } });
     if (!admin) throw new NotFoundException('Admin does not exist');
-    return await this.prisma.admin.delete({ where: { id } });
+    await this.prisma.admin.delete({ where: { id } });
   }
 }

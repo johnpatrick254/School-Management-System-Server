@@ -61,7 +61,6 @@ export class CareerService {
   async delete(id: string) {
     const career = await this.prisma.career.findUnique({ where: { id } });
     if (!career) throw new NotFoundException('career does not exist');
-
-    return await this.prisma.career.delete({ where: { id } });
+    await this.prisma.career.delete({ where: { id } });
   }
 }
