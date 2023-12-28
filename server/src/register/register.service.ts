@@ -34,7 +34,18 @@ export class RegisterService {
       console.log(cohort, this.schoolCode);
 
       const studentPermission = await this.prisma.permission.findMany({
-        where: { type: { in: ['VIEW_STUDENT', 'DELETE_STUDENT'] } },
+        where: {
+          type: {
+            in: [
+              'VIEW_STUDENT',
+              'VIEW_CAREER',
+              'VIEW_COHORT',
+              'VIEW_SECTION',
+              'VIEW_SEMESTER',
+              'VIEW_COURSE',
+            ],
+          },
+        },
       });
 
       const newStudent = await this.prisma.student.create({
@@ -87,8 +98,10 @@ export class RegisterService {
               'VIEW_STUDENT',
               'DELETE_STUDENT',
               'VIEW_TEACHER',
-              'DELETE_TEACHER',
               'VIEW_COHORT',
+              'VIEW_SECTION',
+              'VIEW_SEMESTER',
+              'VIEW_COURSE',
             ],
           },
         },
@@ -157,7 +170,7 @@ export class RegisterService {
       const newPwd = crypto.randomUUID();
 
       const accountantPermission = await this.prisma.permission.findMany({
-        where: { type: { in: ['VIEW_ACCOUNTANT', 'DELETE_ACCOUNTANT'] } },
+        where: { type: { in: ['VIEW_ACCOUNTANT'] } },
       });
 
       const accountants = await this.prisma.accountant.findMany();

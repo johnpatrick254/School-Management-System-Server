@@ -51,29 +51,26 @@ const seed = async () => {
           'DELETE_STUDENT',
           'VIEW_TEACHER',
           'VIEW_COHORT',
-          'DELETE_TEACHER',
-          'DELETE_SECTION',
           'VIEW_SECTION',
           'VIEW_SEMESTER',
           'VIEW_COURSE',
-          'DELETE_COURSE',
         ],
       },
     },
   });
   const accountantPermission = await prisma.permission.findMany({
-    where: { type: { in: ['VIEW_ACCOUNTANT', 'DELETE_ACCOUNTANT'] } },
+    where: { type: { in: ['VIEW_ACCOUNTANT'] } },
   });
   const studentPermission = await prisma.permission.findMany({
     where: {
       type: {
         in: [
           'VIEW_STUDENT',
-          'DELETE_STUDENT',
           'VIEW_CAREER',
           'VIEW_COHORT',
           'VIEW_SECTION',
           'VIEW_SEMESTER',
+          'VIEW_COURSE',
         ],
       },
     },
