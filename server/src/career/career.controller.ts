@@ -17,13 +17,13 @@ import { UpdateCareerDTO } from './DTO/updatecareer.dto';
 export class CareerController {
   constructor(private service: CareerService) {}
 
-  @RequiredPermission('EDIT_CAREER')
+  @RequiredPermission('DELETE_CAREER')
   @Post()
   async create(@Body() data: CreateCareerDTO): Promise<Career> {
     return this.service.create(data);
   }
 
-  @RequiredPermission('EDIT_CAREER')
+  @RequiredPermission('DELETE_CAREER')
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -44,7 +44,7 @@ export class CareerController {
     return this.service.getCareers(limit);
   }
 
-  @RequiredPermission('EDIT_CAREER')
+  @RequiredPermission('DELETE_CAREER')
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.service.delete(id);
