@@ -12,7 +12,6 @@ describe('CohortService', () => {
   const mockCohort: Cohort = {
     id: 'j1s2',
     code: 'JS',
-    name: 'javascript',
     year: 2023,
     careerId: 'careerid',
   };
@@ -89,7 +88,7 @@ describe('CohortService', () => {
     it('should return updated cohort type', async () => {
       jest.spyOn(service, 'update').mockResolvedValue(mockCohort);
       expect(await service.update(id, data)).toEqual(mockCohort);
-     });
+    });
   });
 
   describe('get cohort by Id', () => {
@@ -124,7 +123,7 @@ describe('CohortService', () => {
           mockCohort,
           mockCohort,
         ]);
-      const cohorts = await service.getCohorts(limit)
+      const cohorts = await service.getCohorts(limit);
       expect(cohorts.length).toEqual(limit);
     });
   });

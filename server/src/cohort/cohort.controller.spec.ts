@@ -11,7 +11,6 @@ describe('CohortController', () => {
   const mockCohort: Cohort = {
     id: 'j1s2',
     code: 'JS',
-    name: 'javascript',
     year: 2023,
     careerId: 'careerid',
   };
