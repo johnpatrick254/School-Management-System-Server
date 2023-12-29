@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { loginDTO } from './DTO/login.dto';
 import { compare } from 'bcrypt';
-import { PrismaService } from 'src/database/database.service';
+import { PrismaService } from '../database/database.service';
 import {
   Accountant,
   Admin,
@@ -17,7 +17,7 @@ import {
 } from '@prisma/client';
 import { decode, verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { logger } from 'src/lib/logger';
+import { logger } from '../lib/logger';
 
 @Injectable()
 export class AuthService {
