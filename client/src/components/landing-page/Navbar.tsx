@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { SheetClose } from "../ui/sheet";
+import { useState } from "react";
 
 const navLinks = [
   {
@@ -24,10 +25,33 @@ const navLinks = [
   },
 ];
 
-const Navbar = () => {
-  const pathname = usePathname();
+const NavbarMobile = () => {
+  const currentHash = window.location.hash;
 
-  console.log(pathname);
+  return (
+    <nav>
+      <ul className="flex flex-col">
+        {navLinks.map((link, i) => (
+          <li key={i}>
+            <SheetClose asChild>
+              <Link
+                href={link.path}
+                className={cn(buttonVariants({ variant: "link" }), {
+                  underline: currentHash === link.path,
+                })}
+              >
+                {link.title}
+              </Link>
+            </SheetClose>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+const NavbarDesktop = () => {
+  const [currentHash, setCurrentHash] = useState<string>(window.location.hash);
 
   return (
     <nav>
@@ -36,8 +60,11 @@ const Navbar = () => {
           <li key={i}>
             <Link
               href={link.path}
+              onClick={() => {
+                setCurrentHash(link.path);
+              }}
               className={cn(buttonVariants({ variant: "link" }), {
-                "text-red-400": pathname === link.path,
+                underline: currentHash === link.path,
               })}
             >
               {link.title}
@@ -49,4 +76,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export { NavbarMobile, NavbarDesktop };
