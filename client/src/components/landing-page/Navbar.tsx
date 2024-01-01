@@ -5,25 +5,7 @@ import { buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { SheetClose } from "../ui/sheet";
 import { useState } from "react";
-
-const navLinks = [
-  {
-    title: "Home",
-    path: "#home",
-  },
-  {
-    title: "Features",
-    path: "#features",
-  },
-  {
-    title: "About",
-    path: "#about",
-  },
-  {
-    title: "Team",
-    path: "#team",
-  },
-];
+import { navLinks } from "./constants";
 
 const NavbarMobile = () => {
   const currentHash = window.location.hash;
