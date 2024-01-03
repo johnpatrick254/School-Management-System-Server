@@ -14,7 +14,7 @@ import { Menu } from "lucide-react";
 
 const Header = () => {
   return (
-    <header className="fixed top-0 h-fit z-10 py-4 inset-x-0 w-full border-b border-border bg-background">
+    <header className="fixed top-0 h-fit z-10 py-4 inset-x-0 w-full border-b border-border backdrop-blur">
       <div className="max-w-7xl px-4 mx-auto">
         {/* mobile */}
         <div className="flex flex-row justify-between items-center md:hidden">
