@@ -8,7 +8,7 @@ import { useState } from "react";
 import { navLinks } from "./constants";
 
 const NavbarMobile = () => {
-  const currentHash = window.location.hash;
+  const currentHash = typeof window !== "undefined" ? window.location.hash : "";
 
   return (
     <nav>
@@ -19,7 +19,7 @@ const NavbarMobile = () => {
               <Link
                 href={link.path}
                 className={cn(buttonVariants({ variant: "link" }), {
-                  underline: currentHash === link.path,
+                  "text-tertiary": currentHash === link.path,
                 })}
               >
                 {link.title}
@@ -33,7 +33,9 @@ const NavbarMobile = () => {
 };
 
 const NavbarDesktop = () => {
-  const [currentHash, setCurrentHash] = useState<string>(window.location.hash);
+  const [currentHash, setCurrentHash] = useState<string>(
+    typeof window !== "undefined" ? window.location.hash : ""
+  );
 
   return (
     <nav>
@@ -46,7 +48,7 @@ const NavbarDesktop = () => {
                 setCurrentHash(link.path);
               }}
               className={cn(buttonVariants({ variant: "link" }), {
-                underline: currentHash === link.path,
+                "text-tertiary": currentHash === link.path,
               })}
             >
               {link.title}
