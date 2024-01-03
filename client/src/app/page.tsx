@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="pt-12">
+      <main className="p-2 mt-[92px]">
         <HeroSection />
         <FeatureSection />
         <AboutSection />
