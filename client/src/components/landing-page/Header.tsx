@@ -11,14 +11,17 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Menu } from "lucide-react";
+import Image from "next/image";
 
 const Header = () => {
   return (
-    <header className="fixed top-0 h-fit z-10 py-4 inset-x-0 w-full border-b border-border backdrop-blur">
+    <header className="fixed top-0 h-fit z-10 py-3 inset-x-0 w-full border-b border-border backdrop-blur">
       <div className="max-w-7xl px-4 mx-auto">
         {/* mobile */}
         <div className="flex flex-row justify-between items-center md:hidden">
-          <Link href="/">LOGO</Link>
+          <Link href="/">
+            <Image src="/assets/logo.svg" alt="logo" width={40} height={40} />
+          </Link>
           <div className="flex flex-row items-center">
             <DarkModeToggle />
             <Sheet>
@@ -43,7 +46,9 @@ const Header = () => {
         {/* desktop */}
         <div className="hidden md:flex flex-row justify-between items-center">
           <NavbarDesktop />
-          <Link href="/">LOGO</Link>
+          <Link href="/" className="inline-flex">
+            <Image src="/assets/logo.svg" alt="logo" width={50} height={50} />
+          </Link>
           <div className="flex flex-row items-center gap-2">
             <DarkModeToggle />
             <AuthButtons />
