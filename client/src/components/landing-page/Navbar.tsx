@@ -8,7 +8,7 @@ import { useState } from "react";
 import { navLinks } from "./constants";
 
 const NavbarMobile = () => {
-  const currentHash = window.location.hash;
+  const currentHash = typeof window !== "undefined" ? window.location.hash : "";
 
   return (
     <nav>
@@ -33,7 +33,9 @@ const NavbarMobile = () => {
 };
 
 const NavbarDesktop = () => {
-  const [currentHash, setCurrentHash] = useState<string>(window.location.hash);
+  const [currentHash, setCurrentHash] = useState<string>(
+    typeof window !== "undefined" ? window.location.hash : ""
+  );
 
   return (
     <nav>
