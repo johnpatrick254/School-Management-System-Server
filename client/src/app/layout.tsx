@@ -18,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "antialiased min-h-screen")}>
+      <body
+        className={cn(
+          inter.className,
+          "antialiased min-h-screen scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-background-strong"
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
