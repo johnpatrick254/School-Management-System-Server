@@ -1,4 +1,5 @@
 import { Github, Linkedin } from "lucide-react";
+import { FeatureCardProps } from "../FeatureCard";
 
 export const navLinks = [
   {
@@ -18,7 +19,14 @@ export const navLinks = [
     path: "#team",
   },
 ];
-
+export const Features:FeatureCardProps[]=[
+  {
+    title:'Manage Staff Seamlessly',
+    bulletin:"Staff Management",
+    desc:"",
+    img:""
+  }
+]
 export const teamMembers = [
   {
     name: "John P",
