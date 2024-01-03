@@ -19,7 +19,7 @@ const NavbarMobile = () => {
               <Link
                 href={link.path}
                 className={cn(buttonVariants({ variant: "link" }), {
-                  underline: currentHash === link.path,
+                  "text-tertiary": currentHash === link.path,
                 })}
               >
                 {link.title}
@@ -48,7 +48,7 @@ const NavbarDesktop = () => {
                 setCurrentHash(link.path);
               }}
               className={cn(buttonVariants({ variant: "link" }), {
-                underline: currentHash === link.path,
+                "text-tertiary": currentHash === link.path,
               })}
             >
               {link.title}
