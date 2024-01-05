@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { Public } from './publicroute.decorator';
 import { extractBearerToken } from './Util/extracttoken.util';
+import { logger } from 'src/lib/logger';
 
 @Controller('auth')
 export class AuthController {
@@ -67,10 +68,6 @@ export class AuthController {
 
   @Get('validate')
   async validateToken(@Req() req: Request, @Res() res: Response) {
-    const { authorization } = req.headers;
-    const accessToken = extractBearerToken(authorization);
-    if (!accessToken) throw new UnauthorizedException();
-    const isValid = this.authService.validateUser(accessToken);
-    if (isValid === true) res.status(200);
+    res.status(200).send();
   }
 }

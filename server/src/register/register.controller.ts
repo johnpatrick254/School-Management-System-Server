@@ -6,7 +6,7 @@ import {
   CreateAdminDTO,
   CreateTeacherDTO,
 } from './DTO/createstaff.dto';
-import { RequiredPermission } from 'src/auth/permision.decorator';
+import { RequiredPermission } from '../auth/permision.decorator';
 
 @Controller('register')
 export class RegisterController {
