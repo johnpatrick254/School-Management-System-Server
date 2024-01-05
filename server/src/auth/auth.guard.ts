@@ -9,8 +9,7 @@ import { AuthService } from './auth.service';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './publicroute.decorator';
-import { RequiredPermission } from 'src/auth/permision.decorator';
-import { PrismaService } from 'src/database/database.service';
+import { RequiredPermission } from '../auth/permision.decorator';
 import { PermissionType } from '@prisma/client';
 
 @Injectable()
