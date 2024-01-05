@@ -62,11 +62,8 @@ const Header = () => {
 const AuthButtons = () => {
   return (
     <div className="flex flex-col md:flex-row w-full gap-2">
-      <Link href="/sign-in" className={buttonVariants({ variant: "outline" })}>
+      <Link href="/sign-in" className={buttonVariants({ variant: "default" })}>
         Sign in
-      </Link>
-      <Link href="/sign-up" className={buttonVariants({ variant: "default" })}>
-        Sign up
       </Link>
     </div>
   );
