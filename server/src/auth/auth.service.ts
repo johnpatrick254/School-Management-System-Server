@@ -124,7 +124,7 @@ export class AuthService {
   validateUser(accessToken: string): boolean {
     const secret = this.config.get('SECRET');
     try {
-      if (!verify(accessToken, secret)) throw new UnauthorizedException();
+      if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
       return true;
     } catch (error) {
       logger.debug(error);
@@ -138,7 +138,7 @@ export class AuthService {
   ): Promise<boolean> {
     const secret = this.config.get('SECRET');
 
-    if (!verify(accessToken, secret)) throw new UnauthorizedException();
+    if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
     const userData = decode(accessToken) as { permissions: { id: string }[] };
     console.log(userData);
 
