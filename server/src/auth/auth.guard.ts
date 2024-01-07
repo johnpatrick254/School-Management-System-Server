@@ -9,8 +9,7 @@ import { AuthService } from './auth.service';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './publicroute.decorator';
-import { RequiredPermission } from 'src/auth/permision.decorator';
-import { PrismaService } from 'src/database/database.service';
+import { RequiredPermission } from '../auth/permision.decorator';
 import { PermissionType } from '@prisma/client';
 
 @Injectable()
@@ -36,13 +35,13 @@ export class AuthGuard implements CanActivate {
 
     if (isPublic) {
       if (requiredPermission) {
-        if (!token) throw new UnauthorizedException();
+        if (!token) throw new UnauthorizedException('UNAUTHORIZED: Please provide access token in your request');
         return this.authService.validateUserPerms(requiredPermission, token);
       }
       return true;
     }
 
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException("UNAUTHORIZED: Please provide access token in your request");
     this.authService.validateUser(token);
     if (requiredPermission) {
       return this.authService.validateUserPerms(requiredPermission, token);
