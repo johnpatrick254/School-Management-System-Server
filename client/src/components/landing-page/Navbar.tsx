@@ -47,9 +47,12 @@ const NavbarDesktop = () => {
               onClick={() => {
                 setCurrentHash(link.path);
               }}
-              className={cn(buttonVariants({ variant: "link" }), {
-                "text-tertiary": currentHash === link.path,
-              })}
+              className={cn(
+                buttonVariants({ variant: "link", className: "px-3" }),
+                {
+                  "text-tertiary": currentHash === link.path,
+                }
+              )}
             >
               {link.title}
             </Link>
