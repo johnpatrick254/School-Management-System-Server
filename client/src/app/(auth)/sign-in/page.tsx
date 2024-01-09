@@ -7,7 +7,7 @@ const page = () => {
     <div className="flex flex-row h-screen bg-background-strong">
       <div className="hidden z-10 h-full w-[55%] p-10 text-white border-r border-border relative lg:flex lg:flex-col">
         <Image
-          src="/images/students-teachers-ai.jpg"
+          src="/images/students.jpg"
           alt="students-teachers-img"
           className="absolute inset-0 object-cover w-full h-full object-top"
           quality={60}
