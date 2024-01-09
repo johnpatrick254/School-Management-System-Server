@@ -27,7 +27,7 @@ const page = () => {
           </blockquote>
         </div>
       </div>
-      <div className="h-full w-full lg:px-8 lg:w-[45%] flex flex-col items-center justify-center">
+      <div className="h-full w-full p-6 lg:px-8 lg:w-[45%] flex flex-col items-center justify-center">
         <Link href="/" className="flex gap-2 items-center">
           <Image src="/assets/logo.svg" alt="logo" width={50} height={50} />
           <span className="text-2xl tracking-wider uppercase font-black text-[#8b5cf6] font-mono">
