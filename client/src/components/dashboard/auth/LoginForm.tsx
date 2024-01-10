@@ -20,12 +20,13 @@ import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 const LoginForm: FC = ({}) => {
   return (
-    <div className="mx-auto flex w-[400px] flex-col justify-center items-center space-y-6 rounded-lg md:mt-0 sm:max-w-md xl:p-0">
+    <div className="mx-auto flex w-full sm:w-[400px] flex-col justify-center items-center space-y-6 rounded-lg md:mt-0 sm:max-w-md xl:p-0">
       <div className="p-6 space-y-6 sm:p-8">
-        <Tabs defaultValue="student" className="w-[400px]">
+        <Tabs defaultValue="student" className="w-full sm:w-[400px]">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="student">STUDENT</TabsTrigger>
             <TabsTrigger value="staff">STAFF</TabsTrigger>
@@ -95,7 +96,7 @@ const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
     <div className="bg-background h-full p-5 pb-8 rounded-md space-y-8 border border-border">
       <div className="text-center space-y-3">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-primary">
-          Sign in to your account
+          Sign in
         </h1>
         <p className="text-sm text-secondary">
           Enter your <span className="font-bold uppercase">{entityType}</span>{" "}
@@ -114,7 +115,7 @@ const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
               <FormItem>
                 <FormLabel>Code</FormLabel>
                 <FormControl>
-                  <Input placeholder="code..." {...field} />
+                  <Input placeholder={`${entityType}-001`} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -127,7 +128,7 @@ const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="password..." type="password" {...field} />
+                  <Input placeholder="12345" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,6 +145,15 @@ const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
           </Button>
         </form>
       </Form>
+      <p className="text-center text-secondary text-sm">
+        Is your school not registered?
+        <Link
+          href="/sign-up"
+          className="px-2 hover:text-primary transition-colors underline underline-offset-2"
+        >
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 };
