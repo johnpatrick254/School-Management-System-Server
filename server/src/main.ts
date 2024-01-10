@@ -19,8 +19,8 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
-  await app.listen(PORT, () => {
-    logger.verbose(`LISTENING ON PORT: ${PORT}`)
+  await app.listen(PORT, async () => {
+    logger.log(`✅ APP RUNNING ON : ${await app.getUrl()} 🚀`)
   });
 }
 bootstrap();

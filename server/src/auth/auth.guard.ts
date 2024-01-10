@@ -35,13 +35,13 @@ export class AuthGuard implements CanActivate {
 
     if (isPublic) {
       if (requiredPermission) {
-        if (!token) throw new UnauthorizedException();
+        if (!token) throw new UnauthorizedException('UNAUTHORIZED: Please provide access token in your request');
         return this.authService.validateUserPerms(requiredPermission, token);
       }
       return true;
     }
 
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new UnauthorizedException("UNAUTHORIZED: Please provide access token in your request");
     this.authService.validateUser(token);
     if (requiredPermission) {
       return this.authService.validateUserPerms(requiredPermission, token);

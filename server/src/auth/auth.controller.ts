@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { Public } from './publicroute.decorator';
 import { extractBearerToken } from './Util/extracttoken.util';
+import { logger } from 'src/lib/logger';
 
 @Controller('auth')
 export class AuthController {
@@ -29,15 +30,31 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const secret = this.config.get('SECRET');
-
+    const ENV = (this.config.get('ENV') as ("DEV" | "PROD"));
     const { password, EOC, ...currentStudent } =
       await this.authService.loginStudent(data);
+    let cookieOptions;
 
     const token = Jwt.sign(currentStudent, secret, {
       expiresIn: '24h',
     });
+    if (ENV === "DEV") {
+      cookieOptions = {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24,//24HRS
+        sameSite: "lax"
+      }
+    };
+    if (ENV === "PROD") {
+      cookieOptions = {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24,//24HRS
+        sameSite: "lax",
+        secure: true
+      };
+    }
 
-    res.cookie("session", token, { httpOnly: true, expires: new Date(Date.now() + (60 * 60 * 60 * 24 * 1000)) }).status(200).send({ user: token });
+    res.cookie("session", token, cookieOptions).status(200).send({ user: token });
   }
 
   @Public()
@@ -50,11 +67,29 @@ export class AuthController {
 
     const { password, ...currentStaff } =
       await this.authService.loginStaff(data);
+      const ENV = (this.config.get('ENV') as ("DEV" | "PROD"));
+      let cookieOptions;
 
-    const token = Jwt.sign(currentStaff, secret, {
-      expiresIn: '24h',
-    });
-    res.cookie("session", token, { httpOnly: true, expires: new Date(Date.now() + (60 * 60 * 60 * 4 * 1000)) }).status(200).send({ user: token });
+      const token = Jwt.sign(currentStaff, secret, {
+        expiresIn: '24h',
+      });
+      if (ENV === "DEV") {
+        cookieOptions = {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24,//24HRS
+          sameSite: "lax"
+        }
+      };
+      if (ENV === "PROD") {
+        cookieOptions = {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24,//24HRS
+          sameSite: "lax",
+          secure: true
+        };
+      }
+  
+      res.cookie("session", token, cookieOptions).status(200).send({ user: token })
   }
 
   @Get('logout')
@@ -66,11 +101,7 @@ export class AuthController {
   }
 
   @Get('validate')
-  async validateToken(@Req() req: Request, @Res() res: Response) {
-    const { authorization } = req.headers;
-    const accessToken = extractBearerToken(authorization);
-    if (!accessToken) throw new UnauthorizedException();
-    const isValid = this.authService.validateUser(accessToken);
-    if (isValid === true) res.status(200);
+  async validateToken(@Res() res: Response) {
+    return res.status(200).send({ message: "user valid" });
   }
 }
