@@ -1,26 +1,46 @@
 import Image from "next/image";
 import { FC } from "react";
-import homeBG from "../../assets/homepage-img.png";
+import homeBG from "../../../public/images/homepage-svg.svg";
 import Link from "next/link";
 
 interface HeroSectionProps { }
 
 const HeroSection: FC<HeroSectionProps> = ({ }) => {
   return (
-    <div id="home" className="h-[80vh] flex flex-col gap-y-2 mx-3 py-8 px-10 bg-gradient-to-r from-fuchsia-100 to-blue-100 rounded-[20px]">
-      <div id="home_text" className='flex flex-col gap-y-2  justify-start font-light wordspace-md'>
-        <p className='text-xl '>Discover the pinnacle of education management with our <span className='text-2xl font-bold'>School Management System.</span></p>
-        <p>Seamlessly integrating administrative tasks, academic excellence, and enhanced communication</p>
+    <div id="home" className="
+    h-screen px-5 flex flex-col gap-y-7 py-8 bg-gradient-to-r from-backgroundPrimaryGradient to-backgroundSecondaryGradient rounded-[20px]
+    lg:flex-row lg:h-[600px] lg:justify-between lg:items-center
+    xl:h-[700px]
+    ">
+      <div id="home_text" className='
+      flex flex-col gap-y-2  justify-start font-light wordspace-lg 
+      lg:flex-col lg:w-2/4 lg:pl-11  lg:font-light lg:justify-between lg:items-center lg:gap-y-5
+      '
+      >
+        <p className='text-5xl font-bold'>School Management Made Easy
+        </p>
+        <p>Seamlessly integrating administrative tasks, academic excellence, and enhanced communication, our intuitive platform redefines efficiency and empowerment in educational institutions</p>
+        <div className="cta flex gap-x-4  items-center w-full  text-lg pt-10">
+          <a
+            href='/'
+            className='py-2 px-4 bg-tertiary hover:bg-tertiary-foreground cursor-pointer text-white rounded-sm'
+          >
+            Demo
+          </a>
+          <a
+            href='/'
+            className='py-2 px-4 bg-tertiary hover:bg-tertiary-foreground cursor-pointer text-white rounded-sm'
+          >
+            Read More
+          </a>
+        </div>
       </div>
-      <div className="cta">
-        <a
-          href='/'
-          className='py-2 px-4 bg-fuchsia-600 rounded-sm'
-        >
-          Demo
-        </a>
-      </div>
-      <div className='relative w-full h-3/4'>
+
+
+      <div className={`
+    relative w-full h-1/2 
+    lg:w-1/2 lg:h-3/4
+    `}>
         <Image
           src={homeBG}
           fill={true}
