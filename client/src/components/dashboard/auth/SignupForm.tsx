@@ -22,7 +22,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 
 const SignupForm: FC = ({}) => {
-  const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
+  const BASE_URL = process.env.BASE_URL ?? "http://localhost:3001";
 
   const router = useRouter();
 
@@ -41,7 +41,7 @@ const SignupForm: FC = ({}) => {
     mutationFn: async () => {
       const payload: SigninType = form.getValues();
 
-      await axios.post(`${BASE_URL}/auth/signup`, payload);
+      await axios.post(`${BASE_URL}/auth/signup`, payload,{withCredentials:true});
     },
     onError: (err) => {
       return toast({
