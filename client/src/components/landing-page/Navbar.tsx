@@ -1,33 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { SheetClose } from "../ui/sheet";
+import { useState } from "react";
+import { navLinks } from "./constants";
 
-const navLinks = [
-  {
-    title: "Home",
-    path: "#home",
-  },
-  {
-    title: "Features",
-    path: "#features",
-  },
-  {
-    title: "About",
-    path: "#about",
-  },
-  {
-    title: "Team",
-    path: "#team",
-  },
-];
+const NavbarMobile = () => {
+  const currentHash = typeof window !== "undefined" ? window.location.hash : "";
 
-const Navbar = () => {
-  const pathname = usePathname();
+  return (
+    <nav>
+      <ul className="flex flex-col">
+        {navLinks.map((link, i) => (
+          <li key={i}>
+            <SheetClose asChild>
+              <Link
+                href={link.path}
+                className={cn(buttonVariants({ variant: "link" }), {
+                  "text-tertiary": currentHash === link.path,
+                })}
+              >
+                {link.title}
+              </Link>
+            </SheetClose>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
 
-  console.log(pathname);
+const NavbarDesktop = () => {
+  const [currentHash, setCurrentHash] = useState<string>(
+    typeof window !== "undefined" ? window.location.hash : ""
+  );
 
   return (
     <nav>
@@ -36,9 +44,15 @@ const Navbar = () => {
           <li key={i}>
             <Link
               href={link.path}
-              className={cn(buttonVariants({ variant: "link" }), {
-                "text-red-400": pathname === link.path,
-              })}
+              onClick={() => {
+                setCurrentHash(link.path);
+              }}
+              className={cn(
+                buttonVariants({ variant: "link", className: "px-3" }),
+                {
+                  "text-tertiary": currentHash === link.path,
+                }
+              )}
             >
               {link.title}
             </Link>
@@ -49,4 +63,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export { NavbarMobile, NavbarDesktop };

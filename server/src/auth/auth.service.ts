@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { loginDTO } from './DTO/login.dto';
 import { compare } from 'bcrypt';
-import { PrismaService } from 'src/database/database.service';
+import { PrismaService } from '../database/database.service';
 import {
   Accountant,
   Admin,
@@ -17,7 +17,7 @@ import {
 } from '@prisma/client';
 import { decode, verify } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { logger } from 'src/lib/logger';
+import { logger } from '../lib/logger';
 
 @Injectable()
 export class AuthService {
@@ -124,7 +124,7 @@ export class AuthService {
   validateUser(accessToken: string): boolean {
     const secret = this.config.get('SECRET');
     try {
-      if (!verify(accessToken, secret)) throw new UnauthorizedException();
+      if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
       return true;
     } catch (error) {
       logger.debug(error);
@@ -138,7 +138,7 @@ export class AuthService {
   ): Promise<boolean> {
     const secret = this.config.get('SECRET');
 
-    if (!verify(accessToken, secret)) throw new UnauthorizedException();
+    if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
     const userData = decode(accessToken) as { permissions: { id: string }[] };
     console.log(userData);
 

@@ -11,13 +11,16 @@ import { SectionModule } from './section/section.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CourseModule } from './course/course.module';
 import { SemesterModule } from './semester/semester.module';
-
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
 
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: `.env`, isGlobal: true }),
+    CacheModule.register({isGlobal:true,ttl:36000000}),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     RegisterModule,
     AuthModule,
@@ -25,7 +28,6 @@ import { SemesterModule } from './semester/semester.module';
     CohortModule,
     CareerModule,
     SectionModule,
-    ScheduleModule.forRoot(),
     CourseModule,
     SemesterModule,
   ],
@@ -34,6 +36,10 @@ import { SemesterModule } from './semester/semester.module';
       provide: 'APP_GUARD',
       useClass: AuthGuard,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    }
   ],
 })
 export class AppModule { }

@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateStudentDTO } from './DTO/createstudent.dto';
-import { PrismaService } from 'src/database/database.service';
+import { PrismaService } from '../database/database.service';
 import {
   CreateAccountantDTO,
   CreateAdminDTO,
