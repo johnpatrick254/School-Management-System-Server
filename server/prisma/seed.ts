@@ -177,3 +177,4 @@ const seed = async () => {
 };
 
 seed();
+prisma.$disconnect();
