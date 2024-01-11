@@ -53,7 +53,6 @@ export class AuthController {
         secure: true
       };
     }
-
     res.cookie("session", token, cookieOptions).status(200).send({ user: token });
   }
 
