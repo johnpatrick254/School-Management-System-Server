@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --backgroundPrimaryGradient: 300, 100%, 75%;
+    --backgroundSecondaryGradient: 240, 100%, 75%;
+
+
+    --background-strong: 208, 93%, 95%;
+
+    --tertiary: 258, 90%, 66%;
+    --tertiary-foreground: 254, 43%, 43%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 226, 73%, 10%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 229, 8%, 62%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 62.8% 35.6%;
+
+    --border: 0, 0%, 89%;
+    --input: 240 5.9% 90%;
+    --ring: 234, 40%, 19%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 234, 40%, 19%;
+    --foreground: 0 0% 98%;
+    --backgroundPrimaryGradient: 228, 100%, 10%;
+    --backgroundSecondaryGradient: 234, 30.8%, 28.6%;
+    --background-strong: 226, 73%, 10%;
+    --tertiary: 254, 43%, 43%;
+    --tertiary-foreground: 258, 90%, 66%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+
+    --secondary: 229, 8%, 62%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 35.6%;
+    --destructive-foreground: 0 84.2% 60.2%;
+
+    --border: 235, 40%, 17%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wordspace-md {
+    word-spacing: 2px;
+  }
+
+  .wordspace-lg {
+    word-spacing: 4px;
+  }
+  .scroll-snap-type-y {
+    scroll-snap-type: y mandatory;
+  }
+  
+  .scroll-snap-x-mandatory {
+    scroll-snap-align: start;
+  }
+}
