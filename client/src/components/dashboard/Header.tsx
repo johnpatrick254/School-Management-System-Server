@@ -3,6 +3,8 @@ import { DarkModeToggle } from "../shared/DarkModeToggle";
 import Link from "next/link";
 import Image from "next/image";
 import UserDropdownMenu from "../shared/UserDropdownMenu";
+import MessageSummary from "./MessageSummary";
+import NotificationSummary from "./NotificationSummary";
 
 interface HeaderProps {}
 
@@ -13,8 +15,12 @@ const Header: FC<HeaderProps> = ({}) => {
         <Link href="/">
           <Image src="/assets/logo.svg" alt="logo" width={40} height={40} />
         </Link>
-        <div className="flex flex-row items-center">
-          <DarkModeToggle />
+        <div className="flex flex-row items-center gap-4">
+          <div>
+            <DarkModeToggle />
+            <NotificationSummary />
+            <MessageSummary />
+          </div>
           <UserDropdownMenu />
         </div>
       </div>
