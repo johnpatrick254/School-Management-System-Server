@@ -2,7 +2,7 @@ import { FC } from "react";
 import { DarkModeToggle } from "../shared/DarkModeToggle";
 import Link from "next/link";
 import Image from "next/image";
-import UserDropdownMenu from "../shared/UserDropdownMenu";
+import UserPopover from "../shared/UserPopover";
 import MessageSummary from "./MessageSummary";
 import NotificationSummary from "./NotificationSummary";
 
@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({}) => {
             <NotificationSummary />
             <MessageSummary />
           </div>
-          <UserDropdownMenu />
+          <UserPopover />
         </div>
       </div>
     </header>
