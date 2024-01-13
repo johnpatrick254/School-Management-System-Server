@@ -244,7 +244,7 @@ model Question {
   id             String           @id @default(cuid())
   required       Boolean
   type           QuestionType
-  content        String
+  content        String @db.Text
   examId         String?
   exam           Exam?            @relation(fields: [examId], references: [id], onUpdate: Cascade)
   assignmentId   String?
@@ -263,7 +263,7 @@ model QuestionOption {
 
 model UserAnswer {
   id                String             @id @default(cuid())
-  answer            String
+  answer            String @db.Text
   questionId        String
   question          Question           @relation(fields: [questionId], references: [id], onUpdate: Cascade)
   studentId         String
