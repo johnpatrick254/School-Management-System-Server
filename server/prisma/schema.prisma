@@ -65,6 +65,7 @@ model Student {
   isActive          Boolean            @default(true)
   EOC               DateTime
   cohortId          String
+  type              UserType
   cohort            Cohort             @relation(fields: [cohortId], references: [id], onUpdate: Cascade)
   sectionId         String
   section           Section            @relation(fields: [sectionId], references: [id], onUpdate: Cascade)
@@ -86,6 +87,7 @@ model Teacher {
   email       String       @unique
   year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
+  type        UserType
   isActive    Boolean      @default(true)
   Courses     Course[]
   sections    Section[]
@@ -102,6 +104,7 @@ model Accountant {
   email        String         @unique
   year         Int            @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password     String
+  type         UserType
   isActive     Boolean        @default(true)
   transactions Transactions[]
   permissions  Permission[]
@@ -115,6 +118,7 @@ model Admin {
   email       String       @unique
   year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
+  type        UserType
   isActive    Boolean      @default(true)
   permissions Permission[]
 }

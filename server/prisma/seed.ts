@@ -1,4 +1,4 @@
-import { PermissionType, PrismaClient } from '@prisma/client';
+import { PermissionType,UserType, PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 
@@ -81,6 +81,7 @@ const seed = async () => {
       data: {
         code: 'super-admin-001',
         name: 'super',
+        type:UserType.ADMIN,
         surname: 'admin',
         email: 'super-admin@gmail.com',
         password: await hash('1234', 10),
@@ -95,6 +96,7 @@ const seed = async () => {
       data: {
         code: 'admin-001',
         name: 'admin',
+        type:UserType.ADMIN,
         surname: 'admin',
         email: 'admin@gmail.com',
         password: await hash('1234', 10),
@@ -108,6 +110,7 @@ const seed = async () => {
     const teacher = await prisma.teacher.create({
       data: {
         code: 'teacher-001',
+        type:UserType.TEACHER ,
         name: 'teacher',
         surname: '001',
         email: 'teacher-001@gmail.com',
@@ -149,6 +152,7 @@ const seed = async () => {
     await prisma.student.create({
       data: {
         code: 'student-001',
+        type:UserType.STUDENT,
         name: 'student',
         surname: '001',
         email: 'student-001@gmail.com',
@@ -167,6 +171,7 @@ const seed = async () => {
       data: {
         code: 'accountant-001',
         name: 'accountant',
+        type:UserType.ACCOUNTANT,
         surname: '001',
         email: 'accountant-001@gmail.com',
         password: await hash('1234', 10),
