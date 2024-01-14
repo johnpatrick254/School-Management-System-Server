@@ -62,6 +62,43 @@ export class AuthService {
             id: true,
           },
         },
+        Courses: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        sections: {
+          select: {
+            id: true,
+            name: true
+
+          }
+        },
+        assignments: {
+          select: {
+            id: true,
+            name: true,
+            course: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+        exams: {
+          select: {
+            id: true,
+            code: true,
+            course: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
       },
     });
 
