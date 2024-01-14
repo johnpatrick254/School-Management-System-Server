@@ -37,6 +37,39 @@ export class AuthService {
             id: true,
           },
         },
+        cohort:{
+          select: {
+            id: true,
+            code:true,
+          },  include:{
+            sections:{
+              select:{
+                name:true,
+                id:true,              
+              }
+            }
+          }
+        },
+        courses:{
+          select:{
+            id: true,
+            name: true
+          },
+          include:{
+            exams:{
+              select:{
+                id: true,
+                code: true,
+              },
+            },
+            assignments:{
+              select:{
+                id: true,
+                code: true,
+              },
+            }
+          }
+        },
       },
     });
 
