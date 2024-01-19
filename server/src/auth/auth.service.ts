@@ -24,7 +24,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
-  ) { }
+  ) {}
 
   async loginStudent(data: loginDTO): Promise<Student> {
     const currentUser = await this.prisma.student.findUnique({
@@ -38,30 +38,22 @@ export class AuthService {
           },
         },
         cohort: {
-          select: {
-            id: true,
-            code: true,
-          },
           include: {
             sections: {
               select: {
                 name: true,
                 id: true,
-              }
+              },
             },
-            career:{
-              select  :{
-                id:true,
-                name:true
-              }
-            }
-          }
+            career: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
         },
         courses: {
-          select: {
-            id: true,
-            name: true
-          },
           include: {
             exams: {
               select: {
@@ -74,8 +66,8 @@ export class AuthService {
                 id: true,
                 code: true,
               },
-            }
-          }
+            },
+          },
         },
       },
     });
@@ -105,15 +97,14 @@ export class AuthService {
         Courses: {
           select: {
             id: true,
-            name: true
-          }
+            name: true,
+          },
         },
         sections: {
           select: {
             id: true,
-            name: true
-
-          }
+            name: true,
+          },
         },
         assignments: {
           select: {
@@ -122,10 +113,10 @@ export class AuthService {
             course: {
               select: {
                 id: true,
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
         exams: {
           select: {
@@ -134,10 +125,10 @@ export class AuthService {
             course: {
               select: {
                 id: true,
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
       },
     });
@@ -201,10 +192,11 @@ export class AuthService {
   validateUser(accessToken: string): boolean {
     const secret = this.config.get('SECRET');
     try {
-      if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
+      verify(accessToken, secret)
       return true;
     } catch (error) {
-      logger.debug(error);
+      if (error.message === "invalid signature") throw new UnauthorizedException("Invalid Signature")
+      if (error.expiredAt) throw new UnauthorizedException('Token expired');
       throw new InternalServerErrorException();
     }
   }
@@ -215,7 +207,8 @@ export class AuthService {
   ): Promise<boolean> {
     const secret = this.config.get('SECRET');
 
-    if (!verify(accessToken, secret)) throw new UnauthorizedException('INVALID TOKEN');
+    if (!verify(accessToken, secret))
+      throw new UnauthorizedException('INVALID TOKEN');
     const userData = decode(accessToken) as { permissions: { id: string }[] };
     console.log(userData);
 
