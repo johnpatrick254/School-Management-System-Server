@@ -37,33 +37,40 @@ export class AuthService {
             id: true,
           },
         },
-        cohort:{
+        cohort: {
           select: {
             id: true,
-            code:true,
-          },  include:{
-            sections:{
-              select:{
-                name:true,
-                id:true,              
+            code: true,
+          },
+          include: {
+            sections: {
+              select: {
+                name: true,
+                id: true,
+              }
+            },
+            career:{
+              select  :{
+                id:true,
+                name:true
               }
             }
           }
         },
-        courses:{
-          select:{
+        courses: {
+          select: {
             id: true,
             name: true
           },
-          include:{
-            exams:{
-              select:{
+          include: {
+            exams: {
+              select: {
                 id: true,
                 code: true,
               },
             },
-            assignments:{
-              select:{
+            assignments: {
+              select: {
                 id: true,
                 code: true,
               },
