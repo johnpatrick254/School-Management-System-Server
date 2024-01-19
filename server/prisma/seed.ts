@@ -81,7 +81,7 @@ const seed = async () => {
       data: {
         code: 'super-admin-001',
         name: 'super',
-        type:UserType.ADMIN,
+        type:UserType.SUPER_ADMIN,
         surname: 'admin',
         email: 'super-admin@gmail.com',
         password: await hash('1234', 10),

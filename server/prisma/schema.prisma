@@ -15,6 +15,7 @@ enum UserType {
   TEACHER
   ACCOUNTANT
   ADMIN
+  SUPER_ADMIN
 }
 
 enum PermissionType {

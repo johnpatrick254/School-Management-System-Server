@@ -37,6 +37,46 @@ export class AuthService {
             id: true,
           },
         },
+        cohort: {
+          select: {
+            id: true,
+            code: true,
+          },
+          include: {
+            sections: {
+              select: {
+                name: true,
+                id: true,
+              }
+            },
+            career:{
+              select  :{
+                id:true,
+                name:true
+              }
+            }
+          }
+        },
+        courses: {
+          select: {
+            id: true,
+            name: true
+          },
+          include: {
+            exams: {
+              select: {
+                id: true,
+                code: true,
+              },
+            },
+            assignments: {
+              select: {
+                id: true,
+                code: true,
+              },
+            }
+          }
+        },
       },
     });
 
@@ -61,6 +101,43 @@ export class AuthService {
           select: {
             id: true,
           },
+        },
+        Courses: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        sections: {
+          select: {
+            id: true,
+            name: true
+
+          }
+        },
+        assignments: {
+          select: {
+            id: true,
+            name: true,
+            course: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        },
+        exams: {
+          select: {
+            id: true,
+            code: true,
+            course: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
         },
       },
     });

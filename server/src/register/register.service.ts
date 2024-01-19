@@ -13,6 +13,7 @@ import {
 import { hash } from 'bcrypt';
 import { logger } from '../lib/logger';
 import { ConfigService } from '@nestjs/config';
+import { UserType } from '@prisma/client';
 
 @Injectable()
 export class RegisterService {
@@ -56,6 +57,7 @@ export class RegisterService {
             .toString()
             .padStart(3, '0')}/${cohort.year}`,
           name: data.name,
+          type:UserType.STUDENT,
           surname: data.surname,
           email: data.email,
           password: await hash(newPwd, 10),
@@ -111,6 +113,7 @@ export class RegisterService {
       const newTeacher = await this.prisma.teacher.create({
         data: {
           ...data,
+          type:UserType.TEACHER,
           code: `${this.schoolCode}/TEC-${(teachers.length + 1)
             .toString()
             .padStart(3, '0')}/${new Date().getFullYear()}`,
@@ -144,6 +147,7 @@ export class RegisterService {
       const admin = await this.prisma.admin.create({
         data: {
           ...data,
+          type:UserType.ADMIN,
           code: `${this.schoolCode}/ADM-${(admins.length + 1)
             .toString()
             .padStart(3, '0')}/${new Date().getFullYear()}`,
@@ -180,6 +184,7 @@ export class RegisterService {
             .toString()
             .padStart(3, '0')}/${new Date().getFullYear()}`,
           name: data.name,
+          type:UserType.ACCOUNTANT,
           surname: data.surname,
           email: data.email,
           password: await hash(newPwd, 10),
