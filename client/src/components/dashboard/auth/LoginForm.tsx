@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 
-const LoginForm: FC = ({}) => {
+const LoginForm: FC = ({ }) => {
   return (
     <div className="mx-auto flex w-full sm:w-[400px] flex-col justify-center items-center space-y-6 rounded-lg md:mt-0 sm:max-w-md xl:p-0">
       <div className="p-6 space-y-6 sm:p-8">
@@ -44,7 +44,7 @@ const LoginForm: FC = ({}) => {
 };
 
 const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
-  const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
+  const BASE_URL = process.env.BASE_URL ?? "http://localhost:3001";
 
   const router = useRouter();
 
@@ -62,11 +62,10 @@ const CustomForm = ({ entityType }: { entityType: "student" | "staff" }) => {
     mutationFn: async () => {
       const payload: LoginType = form.getValues();
       console.log("💪", entityType);
-      const { data } = await axios.post(
+      axios.post(
         `${BASE_URL}/auth/login/${entityType}`,
-        payload
+        payload, { withCredentials: true }
       );
-      //validation credentials
     },
     onError: (err) => {
       if (err instanceof AxiosError) {

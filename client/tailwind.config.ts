@@ -25,6 +25,14 @@ module.exports = {
           DEFAULT: "hsl(var(--background))",
           strong: "hsl(var(--background-strong))",
         },
+        backgroundPrimaryGradient: {
+          DEFAULT: 'hsl(--backgroundPrimaryGradient)',
+       
+        },
+        backgroundSecondaryGradient: {
+          DEFAULT: 'hsl(--backgroundSecondaryGradient)',
+       
+        },
         foreground: "hsl(var(--foreground))",
         tertiary: {
           DEFAULT: "hsl(var(--tertiary))",
@@ -33,7 +41,7 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-        },
+        }, 
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
