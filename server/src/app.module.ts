@@ -13,6 +13,7 @@ import { CourseModule } from './course/course.module';
 import { SemesterModule } from './semester/semester.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
+import { CustomCacheInterceptor } from './lib/caching';
 
 
 
@@ -38,7 +39,7 @@ import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
+      useClass: CustomCacheInterceptor,
     }
   ],
 })
