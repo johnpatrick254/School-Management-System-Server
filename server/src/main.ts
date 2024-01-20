@@ -14,7 +14,8 @@ async function bootstrap() {
   app.enableCors(
     {
       origin: ['localhost:3000', FRONTED_URL],
-      credentials: true
+      credentials: true,
+      allowedHeaders: 'Access-Control-Allow-Origin, Accept, Content-Type',
     });
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
