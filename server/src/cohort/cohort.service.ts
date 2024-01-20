@@ -82,7 +82,7 @@ export class CohortService {
 
   async getCohorts(limit: number): Promise<Cohort[]> {
     const cohorts = await this.prisma.cohort.findMany({
-      take: limit,
+      take: +limit,
     });
 
     return cohorts;

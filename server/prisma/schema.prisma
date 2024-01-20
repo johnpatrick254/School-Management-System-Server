@@ -15,6 +15,7 @@ enum UserType {
   TEACHER
   ACCOUNTANT
   ADMIN
+  SUPER_ADMIN
 }
 
 enum PermissionType {
@@ -65,6 +66,7 @@ model Student {
   isActive          Boolean            @default(true)
   EOC               DateTime
   cohortId          String
+  type              UserType
   cohort            Cohort             @relation(fields: [cohortId], references: [id], onUpdate: Cascade)
   sectionId         String
   section           Section            @relation(fields: [sectionId], references: [id], onUpdate: Cascade)
@@ -86,6 +88,7 @@ model Teacher {
   email       String       @unique
   year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
+  type        UserType
   isActive    Boolean      @default(true)
   Courses     Course[]
   sections    Section[]
@@ -102,6 +105,7 @@ model Accountant {
   email        String         @unique
   year         Int            @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password     String
+  type         UserType
   isActive     Boolean        @default(true)
   transactions Transactions[]
   permissions  Permission[]
@@ -115,6 +119,7 @@ model Admin {
   email       String       @unique
   year        Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   password    String
+  type        UserType
   isActive    Boolean      @default(true)
   permissions Permission[]
 }
@@ -240,7 +245,7 @@ model Question {
   id             String           @id @default(cuid())
   required       Boolean
   type           QuestionType
-  content        String
+  content        String @db.Text
   examId         String?
   exam           Exam?            @relation(fields: [examId], references: [id], onUpdate: Cascade)
   assignmentId   String?
@@ -259,7 +264,7 @@ model QuestionOption {
 
 model UserAnswer {
   id                String             @id @default(cuid())
-  answer            String
+  answer            String @db.Text
   questionId        String
   question          Question           @relation(fields: [questionId], references: [id], onUpdate: Cascade)
   studentId         String

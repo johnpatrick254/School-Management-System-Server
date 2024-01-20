@@ -15,6 +15,7 @@ import { Request, Response } from 'express';
 import { Public } from './publicroute.decorator';
 import { extractBearerToken } from './Util/extracttoken.util';
 import { logger } from 'src/lib/logger';
+import { NoCache } from 'src/lib/caching';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +26,7 @@ export class AuthController {
 
   @Public()
   @Post('login/student')
+  @NoCache()
   async loginStudent(
     @Body() data: loginDTO,
     @Res({ passthrough: true }) res: Response,
@@ -58,6 +60,7 @@ export class AuthController {
 
   @Public()
   @Post('login/staff')
+  @NoCache()
   async loginStaff(
     @Body() data: loginDTO,
     @Res({ passthrough: true }) res: Response,
@@ -92,6 +95,7 @@ export class AuthController {
   }
 
   @Get('logout')
+  @NoCache()
   logout(@Res({ passthrough: true }) res: Response): void {
     res
       .cookie('session', "", { httpOnly: true, maxAge: 0 })
@@ -100,7 +104,8 @@ export class AuthController {
   }
 
   @Get('validate')
-  async validateToken(@Res() res: Response) {
-    return res.status(200).send({ message: "user valid" });
+  @NoCache()
+  async validateToken() {
+    return { message: "user valid" };
   }
 }
