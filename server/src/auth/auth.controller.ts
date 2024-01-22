@@ -14,8 +14,8 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { Public } from './publicroute.decorator';
 import { extractBearerToken } from './Util/extracttoken.util';
-import { logger } from 'src/lib/logger';
-import { NoCache } from 'src/lib/caching';
+import { logger } from '../lib/logger';
+import { NoCache } from '../lib/caching';
 
 @Controller('auth')
 export class AuthController {
@@ -55,7 +55,6 @@ export class AuthController {
         secure: true
       };
     }
-
     res.cookie("session", token, cookieOptions).status(200).send({ user: token });
   }
 
