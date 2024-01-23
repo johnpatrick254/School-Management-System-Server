@@ -1,80 +1,89 @@
 import Image from "next/image";
-import { FC } from "react";
 import { teamMembers } from "./constants";
-import TransitionContainer from "../shared/TransitionContainer";
+import { MemberProps } from "@/lib/types/member";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import Link from "next/link";
 
-interface TeamSectionProps { }
-
-const TeamSection: FC<TeamSectionProps> = ({ }) => {
+const TeamSection = () => {
   return (
-    <TransitionContainer variant="TOP" id="team" className="min-h-max w-full py-16 px-8 flex flex-col gap-y-5 ">
+    <section id="team">
+      <div className="container min-h-screen mx-auto max-w-7xl text-center px-12 py-24 space-y-14">
+        <div className="relative flex flex-col gap-2 items-center">
+          <Image
+            src="/assets/bg-star.svg"
+            alt="bg-dots"
+            width={100}
+            height={100}
+            className="absolute lg:block hidden -top-16 -left-10"
+          />
+          <h2 className="mb-6 font-sans text-4xl font-bold leading-none tracking-tight sm:text-5xl md:mx-auto">
+            Our Team
+          </h2>
+          <p className="text-base md:text-lg">
+            Quantum is a reality thanks to our team&apos;s efforts. Meet us.
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:justify-between">
+          {teamMembers.map((member, i) => (
+            <TeamMember key={i} member={member} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
-      <h1 className="text-tertiary-foreground pb-2 text-center text-2xl font-bold rounded-sm">Team</h1>
-
-      <ul className={`
-      flex gap-10 flex-col justify-center mt-8
-      lg:flex-row
-      `}>
-        {teamMembers.map((member, i) => (
-          <li key={i} className="flex flex-col gap-3 items-center">
-
-            <div className="w-full flex justify-between gap-x-5">
-              <Image
-                src={member.photo!}
-                width={130}
-                height={130}
-                className="rounded-full h-full shadow"
-                alt={member.name!}
-              />
-              <div className="flex flex-col w-3/4 gap-y-2 justify-center "  >
-                <h2 className=" text-left text-2xl font-bold rounded-sm">{i == 0 ? 'John Onyango':"Renzo Bocanegra"}</h2>
-                <div className="text-left">
-                  <p className=" text-sm tracking-wider">
-                    {member.role}
-                  </p>
-                </div>
-                <div className="flex flex-row gap-4">
-                  {member.socialNetworks?.map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.url}
-                      className="bg-primary rounded-full p-2 hover:bg-tertiary transition-colors group"
-                    >
-                      <span className="sr-only">{link.name}</span>
-                      <link.logo
-                        size={18}
-                        className="text-primary-foreground group-hover:text-white"
-                      />
-                    </a>
-                  ))}
-                </div>
-
-              </div>
-            </div>
-
-            {i == 0
-              ?
-              <>
-                <p className="text-secondary text-center">
-                  I am a dedicated and adaptable professional with a background in research biology, and a strong passion for full-stack web development, based in Nairobi, Kenya. With a profound appreciation for sleek and user-friendly designs, I bring a unique blend of skills to the tech world.
-                </p>
-              </>
-              :
-              <>
-
-                <p className="text-secondary text-center">
-                  Mechanical-Electrical Engineer specialized in Full-Stack software development whose passionate about learning new technologies and enhancing my coding skills in terms of clarity and efficiency to facilitate collaboration within other developers and optimize application performance        </p>
-
-
-              </>
-            }
-
-          </li>
-
-        ))}
-      </ul>
-     
-    </TransitionContainer>
+const TeamMember = ({ member }: { member: MemberProps }) => {
+  return (
+    <div className="grid sm:grid-cols-3 text-left shadow pb-5 sm:pb-0">
+      <div className="relative w-full h-48 max-h-full rounded shadow sm:h-auto">
+        <Image
+          width={500}
+          height={500}
+          className="absolute object-cover w-full h-full rounded"
+          src={member.photo}
+          alt={member.fullName}
+        />
+      </div>
+      <div className="flex flex-col justify-center mt-5 sm:mt-0 sm:p-5 sm:col-span-2">
+        <p className="text-lg font-bold">
+          {member.fullName} <span className="ml-1">{member.country}</span>
+        </p>
+        <p className="mb-4 text-xs text-tertiary">{member.role}</p>
+        <p className="mb-4 text-sm tracking-wide leading-relaxed">
+          {member.about}
+        </p>
+        <div className="flex items-center space-x-3 justify-center sm:justify-end">
+          {member.socialNetworks?.map((link, i) => (
+            <TooltipProvider key={i} delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    target="_blank"
+                    href={link.url}
+                    className="bg-background rounded-full p-2 hover:bg-tertiary transition-colors group"
+                  >
+                    <span className="sr-only">{link.name}</span>
+                    <link.logo
+                      size={20}
+                      className="text-primary group-hover:text-white"
+                    />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{link.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
