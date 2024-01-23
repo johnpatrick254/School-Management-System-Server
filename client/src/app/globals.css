@@ -9,7 +9,6 @@
     --backgroundPrimaryGradient: 300, 100%, 75%;
     --backgroundSecondaryGradient: 240, 100%, 75%;
 
-
     --background-strong: 208, 93%, 95%;
 
     --tertiary: 258, 90%, 66%;
@@ -48,9 +47,11 @@
     --foreground: 0 0% 98%;
     --backgroundPrimaryGradient: 228, 100%, 10%;
     --backgroundSecondaryGradient: 234, 30.8%, 28.6%;
+
     --background-strong: 226, 73%, 10%;
-    --tertiary: 254, 43%, 43%;
-    --tertiary-foreground: 258, 90%, 66%;
+
+    --tertiary: 258, 90%, 66%;
+    --tertiary-foreground: 254, 43%, 43%;
 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -87,7 +88,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
 }
 
 @layer utilities {
@@ -112,7 +112,7 @@
   .scroll-snap-type-y {
     scroll-snap-type: y mandatory;
   }
-  
+
   .scroll-snap-x-mandatory {
     scroll-snap-align: start;
   }
