@@ -47,7 +47,7 @@ const AboutSection = () => {
                 Free Demo
               </Link>
               <p className="text-xs italic font-light">
-                Note: This Demo uses a fake data
+                Note: This demo does not use real data.
               </p>
             </div>
           </div>
