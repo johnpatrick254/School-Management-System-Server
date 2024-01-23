@@ -1,0 +1,22 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 52 24"
+  fill="#8b5cf6"
+>
+  <defs>
+    <pattern
+      id="ea469ae8-e6ec-4aca-8875-fc402da4d16e"
+      x="0"
+      y="0"
+      width=".135"
+      height=".30"
+    >
+      <circle cx="1" cy="1" r=".7" />
+    </pattern>
+  </defs>
+  <rect
+    fill="url(#ea469ae8-e6ec-4aca-8875-fc402da4d16e)"
+    width="52"
+    height="24"
+  />
+</svg>
