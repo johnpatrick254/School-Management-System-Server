@@ -9,4 +9,7 @@ export class CreateSemesterDTO {
   @IsNotEmpty()
   @IsString()
   careerId: string;
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 }
