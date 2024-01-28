@@ -21,12 +21,12 @@ const getGroupByNumber = (courses: {
   return courses.courses.slice(startIndex, endIndex);
 }
 const divideGroupIntoTwoSubgroups = (group: { id: string }[]) => {
-  if (group.length < 2) {
-    throw new Error("The group should have at least 2 courses for further division.");
+  if (!group.length) {
+    throw new Error("The group should have at least 1 course for further division.");
   }
   const firstSubgroupSize = Math.max(2, Math.floor(group.length / 2));
-  const firstSubgroup = group.slice(0, firstSubgroupSize);
-  const secondSubgroup = group.slice(firstSubgroupSize);
+  const firstSubgroup = (group.length === 1) ? group : group.slice(0, firstSubgroupSize);
+  const secondSubgroup = (group.length === 1) ? [] : group.slice(firstSubgroupSize);
   return [firstSubgroup, secondSubgroup];
 }
 // Permissions
@@ -65,8 +65,6 @@ const seed = async () => {
       data: permissions,
       skipDuplicates: true,
     });
-    console.log(createdPermission);
-
     const superAdminPermission = await prisma.permission.findMany();
     const adminPermission = await prisma.permission.findMany({
       where: { NOT: { type: 'SUPER_ADMIN' } },
@@ -120,7 +118,7 @@ const seed = async () => {
 
     // Admin
     for (let year = 1; year < 5; year++) {
-      let currentYear = 2018;
+      let currentYear = 2020;
       for (let number = 1; number < 10; number++) {
         const firstName = faker.person.firstName()
         const lastName = faker.person.lastName()
@@ -165,42 +163,49 @@ const seed = async () => {
       {
         name: 'Frontend Software Development',
         code: 'FSD',
-        cost: 20500
+        cost: 20500,
+        year: 2020
       },
       {
         name: 'Backend Software Development',
         code: 'BFD',
-        cost: 31500
+        cost: 31500,
+        year: 2021
       },
       {
         name: 'Software Engineering',
         code: 'SFE',
-        cost: 42000
+        cost: 42000,
+        year: 2022
       },
       {
         name: 'Cloud Engineering',
         code: 'CLE',
-        cost: 32000
+        cost: 32000,
+        year: 2023
       },
       {
         name: 'Art and Language',
         code: 'AEL',
-        cost: 13000
+        cost: 13000,
+        year: 2022
       },
       {
         name: 'Mechanical Engineering',
         code: 'MEE',
-        cost: 13000
+        cost: 13000,
+        year: 2021
       },
       {
         name: 'Electrical Engineering',
         code: 'EEE',
-        cost: 4200
+        cost: 4200,
+        year: 2024
       },
     ];
 
     const allCareers = careers.map(async (item) => {
-      const count = randomInt(13, 17);
+      const count = 16
       const shuffledArray = faker.helpers.shuffle(courses);
       const careerCourses = shuffledArray.slice(0, count);
 
@@ -209,6 +214,7 @@ const seed = async () => {
           code: item.name,
           name: item.code,
           cost: item.cost,
+          year: item.year,
           courses: {
             connect: [
               ...careerCourses.map(career => ({ id: career.id }))
@@ -226,9 +232,9 @@ const seed = async () => {
       for (let index = 1; index < 5; index++) {
         const cohort = await prisma.cohort.create({
           data: {
-            code: `${(await career).code + "-" + (2018 + index)}`,
+            code: `${(await career).code + "-" + (2020 + index)}`,
             careerId: (await career).id,
-            year: (2018 + index)
+            year: (2020 + index)
           },
         });
 
@@ -250,7 +256,7 @@ const seed = async () => {
         const semesterCourses = getGroupByNumber(careerCourses, index)
         const semester1 = await prisma.semester.create({
           data: {
-            academicYear: `${(2018 + index)}`,
+            academicYear: `${(2020 + index)}`,
             careerId: (await career).id,
             name: "FIRST SEMESTER",
             courses: {
@@ -263,7 +269,7 @@ const seed = async () => {
         })
         const semester2 = await prisma.semester.create({
           data: {
-            academicYear: `${(2018 + index)}`,
+            academicYear: `${(2020 + index)}`,
             careerId: (await career).id,
             name: "SECOND SEMESTER",
             courses: {
@@ -280,9 +286,10 @@ const seed = async () => {
         const lastName = faker.person.lastName()
         const teacher1 = await prisma.teacher.create({
           data: {
-            code: `${randomUUID()}-TCH-${teacherCount}-${(2018 + index)}`,
+            code: `${randomUUID()}-TCH-${teacherCount}-${(2020 + index)}`,
             type: UserType.TEACHER,
             name: firstName,
+            year: (2020 + index),
             surname: lastName,
             email: `${firstName}.${lastName}@gmail.com`,
             password: await hash('1234', 10),
@@ -292,17 +299,16 @@ const seed = async () => {
           },
         });
         if (teacher1) teacherCount++;
-        console.log(teacherCount);
-
 
         const firstName2 = faker.person.firstName()
         const lastName2 = faker.person.lastName()
         const teacher2 = await prisma.teacher.create({
           data: {
-            code: `${randomUUID()}-TCH-${(teacherCount)}-${(2018 + index + 4)}`,
+            code: `${randomUUID()}-TCH-${(teacherCount)}-${(2020 + index + 4)}`,
             type: UserType.TEACHER,
             name: firstName2,
             surname: lastName2,
+            year: (2020 + index),
             email: `${firstName2}.${lastName2}@gmail.com`,
             password: await hash('1234', 10),
             permissions: {
@@ -311,7 +317,6 @@ const seed = async () => {
           },
         });
         if (teacher2) teacherCount++;
-        console.log(teacherCount);
         //section
         const sectionA = await prisma.section.create({
           data: {
@@ -334,7 +339,7 @@ const seed = async () => {
           const lastName = faker.person.lastName()
           const firstName2 = faker.person.firstName()
           const lastName2 = faker.person.lastName()
-          const eoc = new Date(`1/12/${(2018 + index + 4)}`).toISOString();
+          const eoc = new Date(`1/12/${(2020 + index + 4)}`).toISOString();
           await prisma.student.create({
             data: {
               code: `${randomUUID()}-STD-${await prisma.student.count() + 1}`,
