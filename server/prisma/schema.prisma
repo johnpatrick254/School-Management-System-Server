@@ -157,6 +157,7 @@ model Career {
   code      String     @unique
   name      String
   cost      Int
+  year      Int          @default(dbgenerated("EXTRACT(YEAR FROM NOW())"))
   semesters Semester[]
   cohorts   Cohort[]
   fee       Fee[]

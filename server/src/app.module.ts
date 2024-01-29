@@ -14,6 +14,7 @@ import { SemesterModule } from './semester/semester.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomCacheInterceptor } from './lib/caching';
+import { StatsModule } from './stats/stats.module';
 
 
 
@@ -31,6 +32,7 @@ import { CustomCacheInterceptor } from './lib/caching';
     SectionModule,
     CourseModule,
     SemesterModule,
+    StatsModule,
   ],
   providers: [
     {
