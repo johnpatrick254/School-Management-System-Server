@@ -19,4 +19,8 @@ export class StatsController {
     async getCareerPopulationStats() {
         return await this.statService.getCareerPopulationChartData();
     }
+    @Get('career/doughnut')
+    async getCareerDoughnutStats() {
+        return await this.statService.getCareerDoughnutChartData();
+    }
 }
