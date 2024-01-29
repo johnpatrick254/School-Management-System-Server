@@ -138,6 +138,7 @@ model Course {
   courseResults CourseResult[]
   students      Student[]
   schedules     Schedule[]
+  careers      Career[]
 }
 
 model Cohort {
@@ -159,12 +160,14 @@ model Career {
   semesters Semester[]
   cohorts   Cohort[]
   fee       Fee[]
+  courses Course[]
 }
 
 model Semester {
   id           String   @id @default(cuid())
   academicYear String
   careerId     String
+  name         String
   career       Career   @relation(fields: [careerId], references: [id])
   courses      Course[]
 }

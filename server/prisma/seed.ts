@@ -1,7 +1,34 @@
-import { PermissionType,UserType, PrismaClient } from '@prisma/client';
+import { PermissionType, UserType, PrismaClient, Course } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 import { hash } from 'bcrypt';
-const prisma = new PrismaClient();
+import { randomInt, randomUUID } from 'crypto';
 
+const prisma = new PrismaClient();
+const getGroupByNumber = (courses: {
+  courses: {
+    id: string;
+  }[];
+} & {
+  id: string;
+  code: string;
+  name: string;
+  cost: number;
+}, groupNumber: number) => {
+  const groupSize = Math.ceil(courses.courses.length / 4);
+  const startIndex = (groupNumber - 1) * groupSize;
+  const endIndex = Math.min(startIndex + groupSize, courses.courses.length);
+
+  return courses.courses.slice(startIndex, endIndex);
+}
+const divideGroupIntoTwoSubgroups = (group: { id: string }[]) => {
+  if (group.length < 2) {
+    throw new Error("The group should have at least 2 courses for further division.");
+  }
+  const firstSubgroupSize = Math.max(2, Math.floor(group.length / 2));
+  const firstSubgroup = group.slice(0, firstSubgroupSize);
+  const secondSubgroup = group.slice(firstSubgroupSize);
+  return [firstSubgroup, secondSubgroup];
+}
 // Permissions
 const seed = async () => {
   try {
@@ -81,7 +108,7 @@ const seed = async () => {
       data: {
         code: 'super-admin-001',
         name: 'super',
-        type:UserType.SUPER_ADMIN,
+        type: UserType.SUPER_ADMIN,
         surname: 'admin',
         email: 'super-admin@gmail.com',
         password: await hash('1234', 10),
@@ -92,86 +119,264 @@ const seed = async () => {
     });
 
     // Admin
-    await prisma.admin.create({
-      data: {
-        code: 'admin-001',
-        name: 'admin',
-        type:UserType.ADMIN,
-        surname: 'admin',
-        email: 'admin@gmail.com',
-        password: await hash('1234', 10),
-        permissions: {
-          connect: adminPermission,
+    for (let year = 1; year < 5; year++) {
+      let currentYear = 2018;
+      for (let number = 1; number < 10; number++) {
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
+        await prisma.admin.create({
+          data: {
+            code: `ADM-${number}-${year}`,
+            name: firstName,
+            type: UserType.ADMIN,
+            surname: lastName,
+            email: `${firstName}.${lastName}@gmail.com`,
+            year: currentYear,
+            password: await hash('1234', 10),
+            permissions: {
+              connect: adminPermission,
+            },
+          },
+        });
+      };
+      currentYear++;
+
+    };
+
+    //Courses
+    const numberOfCourses = 90
+    const courses = []
+    for (let index = 1; index < numberOfCourses; index++) {
+      const techPrefix = faker.helpers.arrayElement(['Introduction to', 'Advanced', 'Mastering', 'Fundamentals of']);
+      const techTopic = faker.helpers.arrayElement(['JavaScript', 'Python', 'React', 'Node.js', 'HTML', 'CSS', 'Machine Learning', 'Blockchain', 'Web Development', 'Data Science', 'Vue.js', 'Angular', 'Django', 'Express.js', 'MongoDB']);
+      const techSuffix = faker.helpers.arrayElement(['Development', 'Programming', 'Engineering', 'Applications', 'Security', 'Cloud Computing', 'Mobile Apps', 'AI']);
+      const courseName = `${techPrefix} ${techTopic} ${techSuffix}`
+      courses.push(await prisma.course.create({
+        data: {
+          code: `${randomUUID()}-${techPrefix[0] + techTopic[0] + techSuffix[0]}`,
+          name: courseName,
+
+        }
+      }))
+    };
+
+    //Career
+    const careers = [
+      {
+        name: 'Frontend Software Development',
+        code: 'FSD',
+        cost: 20500
+      },
+      {
+        name: 'Backend Software Development',
+        code: 'BFD',
+        cost: 31500
+      },
+      {
+        name: 'Software Engineering',
+        code: 'SFE',
+        cost: 42000
+      },
+      {
+        name: 'Cloud Engineering',
+        code: 'CLE',
+        cost: 32000
+      },
+      {
+        name: 'Art and Language',
+        code: 'AEL',
+        cost: 13000
+      },
+      {
+        name: 'Mechanical Engineering',
+        code: 'MEE',
+        cost: 13000
+      },
+      {
+        name: 'Electrical Engineering',
+        code: 'EEE',
+        cost: 4200
+      },
+    ];
+
+    const allCareers = careers.map(async (item) => {
+      const count = randomInt(13, 17);
+      const shuffledArray = faker.helpers.shuffle(courses);
+      const careerCourses = shuffledArray.slice(0, count);
+
+      return await prisma.career.create({
+        data: {
+          code: item.name,
+          name: item.code,
+          cost: item.cost,
+          courses: {
+            connect: [
+              ...careerCourses.map(career => ({ id: career.id }))
+            ]
+          }
         },
-      },
-    });
+      });
+    }
+    );
 
-    // Teacher
-    const teacher = await prisma.teacher.create({
-      data: {
-        code: 'teacher-001',
-        type:UserType.TEACHER ,
-        name: 'teacher',
-        surname: '001',
-        email: 'teacher-001@gmail.com',
-        password: await hash('1234', 10),
-        permissions: {
-          connect: teacherPermission,
-        },
-      },
-    });
+    let teacherCount = await prisma.teacher.count() + 1;
+    allCareers.map(async (career) => {
 
-    // Career
-    const career = await prisma.career.create({
-      data: {
-        code: 'JS-101',
-        name: 'JS Fundamentals',
-        cost: 10000,
-      },
-    });
+      // Cohort
+      for (let index = 1; index < 5; index++) {
+        const cohort = await prisma.cohort.create({
+          data: {
+            code: `${(await career).code + "-" + (2018 + index)}`,
+            careerId: (await career).id,
+            year: (2018 + index)
+          },
+        });
 
-    // Cohort
-    const cohort = await prisma.cohort.create({
-      data: {
-        code: 'JS',
-        careerId: career.id,
-      },
-    });
+        //semester
+        const careerCourses = await prisma.career.findUnique(
+          {
+            where: {
+              id: (await career).id
+            },
+            include: {
+              courses: {
+                select: {
+                  id: true
+                }
+              }
+            }
+          }
+        );
+        const semesterCourses = getGroupByNumber(careerCourses, index)
+        const semester1 = await prisma.semester.create({
+          data: {
+            academicYear: `${(2018 + index)}`,
+            careerId: (await career).id,
+            name: "FIRST SEMESTER",
+            courses: {
+              connect: [
+                ...divideGroupIntoTwoSubgroups(semesterCourses)[0]
+              ]
+            }
 
-    // Section
-    const section = await prisma.section.create({
-      data: {
-        name: 'JS Fundamentals',
-        teacherId: teacher.id,
-        cohortId: cohort.id,
-      },
-    });
+          }
+        })
+        const semester2 = await prisma.semester.create({
+          data: {
+            academicYear: `${(2018 + index)}`,
+            careerId: (await career).id,
+            name: "SECOND SEMESTER",
+            courses: {
+              connect: [
+                ...divideGroupIntoTwoSubgroups(semesterCourses)[1]
+              ]
+            }
 
-    // Student
-    const eoc = new Date('1/12/2024').toISOString();
-    await prisma.student.create({
-      data: {
-        code: 'student-001',
-        type:UserType.STUDENT,
-        name: 'student',
-        surname: '001',
-        email: 'student-001@gmail.com',
-        password: await hash('1234', 10),
-        cohortId: cohort.id,
-        EOC: eoc,
-        sectionId: section.id,
-        permissions: {
-          connect: studentPermission,
-        },
-      },
-    });
+          }
+        })
 
+        //Teacher
+        const firstName = faker.person.firstName()
+        const lastName = faker.person.lastName()
+        const teacher1 = await prisma.teacher.create({
+          data: {
+            code: `${randomUUID()}-TCH-${teacherCount}-${(2018 + index)}`,
+            type: UserType.TEACHER,
+            name: firstName,
+            surname: lastName,
+            email: `${firstName}.${lastName}@gmail.com`,
+            password: await hash('1234', 10),
+            permissions: {
+              connect: teacherPermission,
+            },
+          },
+        });
+        if (teacher1) teacherCount++;
+        console.log(teacherCount);
+
+
+        const firstName2 = faker.person.firstName()
+        const lastName2 = faker.person.lastName()
+        const teacher2 = await prisma.teacher.create({
+          data: {
+            code: `${randomUUID()}-TCH-${(teacherCount)}-${(2018 + index + 4)}`,
+            type: UserType.TEACHER,
+            name: firstName2,
+            surname: lastName2,
+            email: `${firstName2}.${lastName2}@gmail.com`,
+            password: await hash('1234', 10),
+            permissions: {
+              connect: teacherPermission,
+            },
+          },
+        });
+        if (teacher2) teacherCount++;
+        console.log(teacherCount);
+        //section
+        const sectionA = await prisma.section.create({
+          data: {
+            name: `${cohort.code}-A`,
+            teacherId: teacher1.id,
+            cohortId: cohort.id,
+          },
+        });
+        const sectionB = await prisma.section.create({
+          data: {
+            name: `${cohort.code}-A`,
+            teacherId: teacher2.id,
+            cohortId: cohort.id,
+          },
+        });
+        for (let x = 1; x < randomInt(50, 70); x++) {
+
+          // Students
+          const firstName = faker.person.firstName()
+          const lastName = faker.person.lastName()
+          const firstName2 = faker.person.firstName()
+          const lastName2 = faker.person.lastName()
+          const eoc = new Date(`1/12/${(2018 + index + 4)}`).toISOString();
+          await prisma.student.create({
+            data: {
+              code: `${randomUUID()}-STD-${await prisma.student.count() + 1}`,
+              type: UserType.STUDENT,
+              name: firstName,
+              surname: lastName,
+              email: firstName + "." + lastName + randomInt(1, 100) + '@gmail.com',
+              password: await hash('1234', 10),
+              cohortId: cohort.id,
+              EOC: eoc,
+              sectionId: sectionA.id,
+              permissions: {
+                connect: studentPermission,
+              },
+            },
+          });
+
+          await prisma.student.create({
+            data: {
+              code: `${randomUUID()}-STD-${await prisma.student.count() + 1}`,
+              type: UserType.STUDENT,
+              name: firstName2,
+              surname: lastName2,
+              email: firstName2 + "." + lastName2 + randomInt(1, 100) + '@gmail.com',
+              password: await hash('1234', 10),
+              cohortId: cohort.id,
+              EOC: eoc,
+              sectionId: sectionB.id,
+              permissions: {
+                connect: studentPermission,
+              },
+            },
+          });
+        };
+      };
+    })
     // Accountant
     await prisma.accountant.create({
       data: {
         code: 'accountant-001',
         name: 'accountant',
-        type:UserType.ACCOUNTANT,
+        type: UserType.ACCOUNTANT,
         surname: '001',
         email: 'accountant-001@gmail.com',
         password: await hash('1234', 10),
