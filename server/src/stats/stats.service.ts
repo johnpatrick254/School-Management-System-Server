@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException ,Logger} from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/database/database.service';
 
 @Injectable()
 export class StatsService {
     constructor(private prismaService: PrismaService) { }
-    protected logger : Logger
+    protected logger: Logger
     async getStudentPopulationChartData() {
         const totalNumberOfStudents = await this.prismaService.student.count({
             where: {
@@ -111,5 +111,82 @@ export class StatsService {
             type: "Teacher"
         }
     };
+    async getCareerDoughnutChartData() {
+        const careers = await this.prismaService.career.findMany({
+            include: {
+                cohorts: {
+                    include: {
+                        _count: {
+                            select: {
+                                students: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (!careers) throw new NotFoundException("No Teachers found");
+        const sortedCareers = careers.sort((a, b) => b.cohorts[0]._count.students - a.cohorts[0]._count.students);
+        let data = {
+            topCareers: [],
+            careers: []
+        };
+
+        sortedCareers.map((career, i) => {
+
+            if (i < 3) {
+                let totalStudents = 0
+                career.cohorts.map(a => totalStudents += a._count.students)
+                data.topCareers = [
+                    ...data.topCareers, {
+                        name: career.code,
+                        students: totalStudents
+                    }
+                ]
+            } else {
+                let totalStudents = 0
+                career.cohorts.map(a => totalStudents += a._count.students)
+                data.careers = [
+                    ...data.careers, {
+                        name: career.code,
+                        students: totalStudents
+                    }
+                ]
+            }
+
+        })
+
+
+        return data;
+    };
+
+    async getCohortPopulationData (){
+        const totalNumberOfStudents = await this.prismaService.student.count();
+        if (!totalNumberOfStudents) throw new NotFoundException("No students found");
+        const currentYear = new Date().getFullYear();
+        const startYear = currentYear - 3;
+        let data = [];
+        let labels = [];
+
+        for (let index = startYear; index <= currentYear; index++) {
+            labels.push(index);
+            const totalStudents = await this.prismaService.student.findMany({
+                where: {
+                    cohort: {
+                        year: index
+                    }
+                }
+            });
+            data.push(totalStudents.length);
+        };
+
+        return {
+            chartData: {
+                data: data,
+                labels: labels,
+            },
+        }
+    }
 
 }
