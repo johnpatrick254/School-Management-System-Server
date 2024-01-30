@@ -159,6 +159,34 @@ export class StatsService {
 
 
         return data;
+    };
+
+    async getCohortPopulationData (){
+        const totalNumberOfStudents = await this.prismaService.student.count();
+        if (!totalNumberOfStudents) throw new NotFoundException("No students found");
+        const currentYear = new Date().getFullYear();
+        const startYear = currentYear - 3;
+        let data = [];
+        let labels = [];
+
+        for (let index = startYear; index <= currentYear; index++) {
+            labels.push(index);
+            const totalStudents = await this.prismaService.student.findMany({
+                where: {
+                    cohort: {
+                        year: index
+                    }
+                }
+            });
+            data.push(totalStudents.length);
+        };
+
+        return {
+            chartData: {
+                data: data,
+                labels: labels,
+            },
+        }
     }
 
 }
