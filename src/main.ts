@@ -13,12 +13,11 @@ async function bootstrap() {
   const FRONTED_URL = configService.get('FRONTEND_URL');
   const PORT = configService.get('PORT');
   app.use(helmet());
+  app.use(cookieParser());
   app.enableCors({
     origin: `${FRONTED_URL}`,
-    credentials: true,
-    allowedHeaders: ['Access-Control-Allow-Origin', 'Content-Type','Accept'],
+    credentials: true
   });
-  app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter());
   await app.listen(PORT, async () => {

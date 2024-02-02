@@ -51,7 +51,7 @@ export class AuthController {
       cookieOptions = {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24,//24HRS
-        sameSite: "lax",
+        sameSite: "none",
         secure: true
       };
     }
