@@ -19,16 +19,26 @@ export class TaskService {
         const skip = (page - 1) * take;
         const totals = await this.prisma.task.count({
             where: {
-                assignedUserId,
-
+                OR: [
+                    {
+                        authorId: assignedUserId,
+                        assignedUserId: assignedUserId
+                    }
+                ]
             }
         });
         const lastPage = Math.ceil(totals / take)
         if (page > lastPage || page <= 0) return { tasks: [], meta: { currentPage: page, lastPage } };
         const tasks = await this.prisma.task.findMany({
             where: {
-                assignedUserId,
-
+                OR: [
+                    {
+                        authorId:assignedUserId,
+                    },
+                    {
+                        assignedUserId:assignedUserId
+                    }
+                ]
             },
             skip,
             take: take,
