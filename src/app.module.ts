@@ -15,13 +15,14 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
 import { CustomCacheInterceptor } from './lib/caching';
 import { StatsModule } from './stats/stats.module';
+import { TaskModule } from './task/task.module';
 
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: `.env`, isGlobal: true }),
-    CacheModule.register({isGlobal:true,ttl:36000000}),
+    CacheModule.register({isGlobal:true,ttl:600}),
     ScheduleModule.forRoot(),
     DatabaseModule,
     RegisterModule,
@@ -33,6 +34,7 @@ import { StatsModule } from './stats/stats.module';
     CourseModule,
     SemesterModule,
     StatsModule,
+    TaskModule,
   ],
   providers: [
     {
