@@ -17,6 +17,11 @@ enum UserType {
   ADMIN
   SUPER_ADMIN
 }
+enum TaskStatus {
+ PENDING
+ IN_PROGRESS
+ COMPLETED
+}
 
 enum PermissionType {
   CREATE_STAFF
@@ -47,6 +52,15 @@ enum PermissionType {
   VIEW_SEMESTER
 }
 
+model Task {
+  id String @id @default(cuid())
+  title String
+  description String @db.Text
+  authorId String
+  assignedUserId String?
+  status TaskStatus @default(PENDING)
+  dateCreated String @default(dbgenerated("NOW()::date"))
+}
 model Permission {
   id          String         @id @default(cuid())
   type        PermissionType @unique

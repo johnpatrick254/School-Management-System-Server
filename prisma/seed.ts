@@ -1,4 +1,4 @@
-import { PermissionType, UserType, PrismaClient, Course } from '@prisma/client';
+import { PermissionType, UserType, PrismaClient, Course,TaskStatus } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { hash } from 'bcrypt';
 import { randomInt, randomUUID } from 'crypto';
@@ -102,7 +102,7 @@ const seed = async () => {
     });
 
     // Super Admin
-    await prisma.admin.create({
+    const superAdmin = await prisma.admin.create({
       data: {
         code: 'super-admin-001',
         name: 'super',
@@ -115,7 +115,31 @@ const seed = async () => {
         },
       },
     });
+    // Admin Tasks
+    for (let index = 0; index < 20; index++) {
+     
 
+      let status: string;
+      if(index % 1 == 0){
+        status =TaskStatus.COMPLETED
+      }
+      if(index % 1 !== 0){
+        status =TaskStatus.IN_PROGRESS
+      }
+      if(index > 12){
+        status =TaskStatus.PENDING
+      }
+      await prisma.task.create({
+        data:{
+          title: faker.word.verb()+ " " + faker.word.noun(),
+          description:faker.word.words(10),
+          authorId:superAdmin.id
+        }
+      })
+
+     
+      
+    }
     // Admin
     for (let year = 1; year < 5; year++) {
       let currentYear = 2020;
