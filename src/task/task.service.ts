@@ -21,8 +21,10 @@ export class TaskService {
             where: {
                 OR: [
                     {
-                        authorId: assignedUserId,
-                        assignedUserId: assignedUserId
+                        authorId:assignedUserId,
+                    },
+                    {
+                        assignedUserId:assignedUserId
                     }
                 ]
             }
