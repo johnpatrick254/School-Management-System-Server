@@ -15,15 +15,18 @@ export class TaskController {
     @Get()
     async getTasks(@Query() data: GetTasksDTO) {
         return await this.service.getTasks(data);;
-    }
+    };
+
     @Get('/:id')
     async getTask(@Param('id') id: string) {
         return this.service.getTask(id);
     };
+
     @Put('/:id')
     async updateTask(@Body() data: updateTaskDTO, @Param('id') id: string) {
         return await this.service.updateTask(data, id);
     };
+    
     @Delete('/:id')
     async deleteTask(@Param('id') id: string) {
         return this.service.deleteTask(id);
